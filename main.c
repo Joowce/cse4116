@@ -9,11 +9,12 @@
 
 int main() {
     pid_t p_input;
-//    pid_t p_output;
+    pid_t p_output;
 
     p_input = execf("input");
+    p_output = execf("output");
     LOG_INFO("forked input process: %d", p_input);
-//    LOG_INFO("forked output process: %d", p_output);
+    LOG_INFO("forked output process: %d", p_output);
     return 0;
 }
 
