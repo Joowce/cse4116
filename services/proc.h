@@ -13,16 +13,14 @@
 
 pid_t execf (char* name) {
     pid_t pid = fork();
-    char buf[100];
 
     if (pid == 0) {
         execvp(name, NULL);
     } else if (pid == -1) {
-        log_err("fail to fork process");
+        LOG__ERROR("fail to fork process");
         exit(0);
     } else {
-        sprintf(buf, "success to fork process %s", name);
-        log_dev(buf);
+        LOG__INFO("success fork process %d", pid);
     }
 
     return pid;

@@ -3,4 +3,5 @@ project(embeded C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(embeded main.c log/log.c log/log.h proc.h)
+add_executable(main main.c services/log/log.c services/log/log.h services/proc.h)
+add_executable(input input.c services/log/log.c services/log/log.h)
