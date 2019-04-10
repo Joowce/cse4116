@@ -20,13 +20,13 @@ pid_t execf (char* name) {
     if (pid == 0) {
         cwd = getcwd(buff, BUFSIZ);
         strcat(cwd, "/"); strcat(cwd, name);
-        LOG__INFO("TRY EXECVP %s in %s", name, cwd);
+        LOG_INFO("TRY EXECVP %s in %s", name, cwd);
         execl(cwd, name, NULL);
     } else if (pid == -1) {
-        LOG__ERROR("fail to fork process");
+        LOG_ERROR("fail to fork process");
         exit(0);
     } else {
-        LOG__INFO("success fork process %d", pid);
+        LOG_INFO("success fork process %d", pid);
     }
 
     return pid;

@@ -88,7 +88,7 @@ int LOGlogging(char log_type, const char *src_file, const char *func, int line_n
     sz += printf("(%c) ", log_type);
     sz += printf("%04d%02d%02d:%02d%02d%02d%06ld:%05d",
                   1900 + tm1->tm_year, tm1->tm_mon + 1, tm1->tm_mday,
-                  tm1->tm_hour, tm1->tm_min, tm1->tm_sec, tv.tv_usec, pid);
+                  tm1->tm_hour, tm1->tm_min, tm1->tm_sec, (long)tv.tv_usec, pid);
     snprintf(src_info, 128, "%s:%s(%d)", src_file, func, line_no);
     sz += printf(":%-50.50s: ", src_info);
     sz += vprintf(fmt, ap);

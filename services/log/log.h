@@ -25,15 +25,15 @@ int LOGsetLevel(int log_lvl);
 int LOGgetLevel(void);
 
 #define LOG_CALL(func)\
-	LOG__TRACE("%s #### starting...", #func);\
+	LOG_TRACE("%s #### starting...", #func);\
 	func;\
-	LOG__TRACE("%s #### end.", #func)
+	LOG_TRACE("%s #### end.", #func)
 
 
 /*
 * Trace Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
 */
-#define LOG__TRACE(...) \
+#define LOG_TRACE(...) \
     do { \
         if(LOG_IS_TRACE) { \
             LOGlogging('T', __FILE__, __func__, __LINE__, __VA_ARGS__);\
@@ -43,7 +43,7 @@ int LOGgetLevel(void);
 /*
 * debug Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
 */
-#define LOG__DEBUG(...) \
+#define LOG_DEBUG(...) \
     do { \
         if(LOG_IS_DEBUG) { \
             LOGlogging('D', __FILE__, __func__, __LINE__, __VA_ARGS__);\
@@ -53,7 +53,7 @@ int LOGgetLevel(void);
 /*
 * ¡ﬂø‰ ¡§∫∏ Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
 */
-#define LOG__INFO(...) \
+#define LOG_INFO(...) \
     do { \
         if(LOG_IS_INFO) { \
             LOGlogging('I', __FILE__, __func__, __LINE__, __VA_ARGS__);\
@@ -63,7 +63,7 @@ int LOGgetLevel(void);
 /*
 * warning Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
 */
-#define LOG__WARNING(...) \
+#define LOG_WARNING(...) \
     do { \
         if(LOG_IS_WARNING) { \
             LOGlogging('W', __FILE__, __func__, __LINE__, __VA_ARGS__);\
@@ -73,7 +73,7 @@ int LOGgetLevel(void);
 /*
 * error Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
 */
-#define LOG__ERROR(...) \
+#define LOG_ERROR(...) \
     do { \
         if(LOG_IS_ERROR) { \
             LOGlogging('E', __FILE__, __func__, __LINE__, __VA_ARGS__);\
@@ -84,7 +84,7 @@ int LOGgetLevel(void);
 /*
 * fatal error Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
 */
-#define LOG__FATAL(...) \
+#define LOG_FATAL(...) \
     do { \
         if(LOG_IS_FATAL) { \
             LOGlogging('F', __FILE__, __func__, __LINE__, __VA_ARGS__);\
