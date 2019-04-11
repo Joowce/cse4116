@@ -4,11 +4,14 @@
 #include <stdio.h>
 
 #include "../../devices/dot/dot.h"
+#include "../../devices/led/led.h"
+
 #include "../../services/log/log.h"
 #include "device.h"
 
 
 device_itf DEVICE_TABLE [NUM_DEVICE] = {
+        {OPEN_LED, CLOSE_LED, (callback*)LED_CALLBACK},
         {OPEN_DOT, CLOSE_DOT, (callback*)DOT_CALLBACK}
 };
 

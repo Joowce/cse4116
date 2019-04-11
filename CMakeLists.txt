@@ -4,6 +4,6 @@ project(embeded C)
 set(CMAKE_C_STANDARD 11)
 
 
-add_executable(main main.c services/log/log.c services/log/log.h services/proc.h services/signal/signal.c services/signal/signal.h services/mq/mq.h services/mq/mq.c controllers/device/itf.h controllers/device/dot/dot.c controllers/device/dot/dot.h)
+add_executable(main main.c services/log/log.c services/log/log.h services/proc.h services/signal/signal.c services/signal/signal.h services/mq/mq.h services/mq/mq.c controllers/device/itf.h controllers/device/dot/dot.c controllers/device/dot/dot.h devices/led/light.h controllers/device/led/led.c controllers/device/led/led.h)
 add_executable(input input.c services/log/log.c services/log/log.h)
-add_executable(output output.c services/log/log.c services/log/log.h services/mq/mq.h services/mq/mq.c devices/dot/font.h devices/dot/dot.c devices/dot/dot.h controllers/device/device.c controllers/device/device.h controllers/device/itf.h devices/dot/dot_itf.h)
+add_executable(output output.c services/log/log.c services/log/log.h services/mq/mq.h services/mq/mq.c devices/dot/font.h devices/dot/dot.c devices/dot/dot.h controllers/device/device.c controllers/device/device.h controllers/device/itf.h devices/dot/dot_itf.h devices/led/led.c devices/led/led.h devices/led/led_itf.h devices/led/light.h)

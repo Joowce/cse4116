@@ -8,7 +8,8 @@
 #include "services/proc.h"
 #include "services/mq/mq.h"
 
-#include "controllers/device/dot/dot.h"
+#include "controllers/device/led/led.h"
+#include "devices/led/light.h"
 
 
 /**
@@ -37,8 +38,8 @@ int main() {
     p_output = execf("output");
     LOG_INFO("forked output process: %d", p_output);
 
-    dot_print_num(6);
-    msgbuf* msg = create_message(4, 0, 0, data);
+    light_led(LED_3);
+    msgbuf* msg = create_message(4, 0, 0, NULL);
 
     if(send_message(msg) == -1) kill(p_output, SIGUSR1);
     return 0;

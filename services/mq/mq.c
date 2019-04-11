@@ -41,7 +41,7 @@ msgbuf* create_message(int device_type, int callback_num, int cnt, unsigned char
     msg->data.device_type = device_type;
     msg->data.callback_num = callback_num;
     msg->data.arg_cnt = cnt;
-    memcpy(msg->data.data, data, sizeof(msg->data.data));
+    if (data != NULL) memcpy(msg->data.data, data, sizeof(msg->data.data));
     return msg;
 }
 
