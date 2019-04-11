@@ -4,6 +4,7 @@
 #include "../../services/callback.h"
 #include "../../services/mq/mq.h"
 
+
 #ifndef EMBEDED_DEVICE_H
 #define EMBEDED_DEVICE_H
 
@@ -18,6 +19,12 @@ int exec_callback (MESSAGE);
 #define DEVICE_LCD      2
 #define DEVICE_DOT      3
 
+typedef struct {
+    callback_no_arg open;
+    callback_no_arg close;
+    callback*        callbacks;
+} device_itf;
 
+extern device_itf DEVICE_TABLE [NUM_DEVICE];
 
 #endif //EMBEDED_DEVICE_H

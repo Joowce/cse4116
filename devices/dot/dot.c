@@ -8,10 +8,13 @@
 
 #include "./font.h"
 #include "../../services/log/log.h"
+#include "./dot.h"
 
 #define FPGA_DOT_DEVICE "/dev/fpga_dot"
 
+const callback DOT_CALLBACK[NUM_CALLBACK_DOT] = {cb_print_dot, cb_print_dot_num};
 static int dev = -1;
+
 
 int open_dot () {
     if (dev != -1) return dev;
@@ -30,13 +33,14 @@ int close_dot () {
 
 
 static int print_dot (const unsigned char* data) {
-    int str_size;
-
-    dev = open_dot();
-    if (dev < 0) return -1;
-
-    str_size=sizeof(data);
-    write(dev,data,str_size);
+//    int str_size;
+//
+//    dev = open_dot();
+//    if (dev < 0) return -1;
+//
+//    str_size=sizeof(data);
+//    write(dev,data,str_size);
+    LOG_INFO("DEVICE::dot:print %s", data);
 
     return 1;
 }
@@ -53,9 +57,11 @@ static int print_dot_num (int num) {
 
 int cb_print_dot(int cnt, ...) {
     va_list ap;
+    unsigned char * message;
 
     va_start(ap, cnt);
-    int result = print_dot((unsigned char *)ap);
+    message = va_arg(ap, unsigned char *);
+    int result = print_dot(message);
     va_end(ap);
 
     return result;

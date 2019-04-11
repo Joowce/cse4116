@@ -1,20 +1,22 @@
 //
 // Created by 민지우 on 2019-04-11.
 //
+#include <stdio.h>
 
 #include "../../devices/dot/dot.h"
+#include "../../services/log/log.h"
 #include "device.h"
 
-static const callback_no_arg OPEN[NUM_DEVICE] = {OPEN_DOT};
-static const callback_no_arg CLOSE[NUM_DEVICE] = {CLOSE_DOT};
 
-static const callback* CALLBACK_DEVICE[NUM_DEVICE] = {DOT_CALLBACK};
+device_itf DEVICE_TABLE [NUM_DEVICE] = {
+        {OPEN_DOT, CLOSE_DOT, (callback*)DOT_CALLBACK}
+};
 
 
 int open_drivers () {
     int i;
     for (i = 0; i < NUM_DEVICE; i++) {
-        if(OPEN[i]() == -1) return -1;
+        if(DEVICE_TABLE[i].open() == -1) return -1;
     }
     return 1;
 }
@@ -22,11 +24,18 @@ int open_drivers () {
 int close_drivers () {
     int i;
     for (i=0; i < NUM_DEVICE; i++) {
-        if(CLOSE[i]() == -1) return -1;
+        if(DEVICE_TABLE[i].close() == -1) return -1;
     }
     return 1;
 }
 
 int exec_callback (MESSAGE message) {
-    return CALLBACK_DEVICE[message.device_type][message.callback_num](message.arg_cnt, message.data);
+    callback cb = DEVICE_TABLE[message.device_type].callbacks[message.callback_num];
+
+    if (cb == NULL) {
+        LOG_ERROR("No callback function:: device: %D, callback#: %d", message.device_type, message.callback_num);
+        return -1;
+    }
+
+    return cb(message.arg_cnt, message.data);
 }
