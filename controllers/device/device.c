@@ -5,12 +5,14 @@
 
 #include "../../devices/dot/dot.h"
 #include "../../devices/led/led.h"
+#include "../../devices/lcd/lcd.h"
 
 #include "../../services/log/log.h"
 #include "device.h"
 
 
 device_itf DEVICE_TABLE [NUM_DEVICE] = {
+        {OPEN_LCD, CLOSE_LCD, (callback*)LCD_CALLBACK},
         {OPEN_LED, CLOSE_LED, (callback*)LED_CALLBACK},
         {OPEN_DOT, CLOSE_DOT, (callback*)DOT_CALLBACK}
 };

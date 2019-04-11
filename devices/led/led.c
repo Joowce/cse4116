@@ -14,7 +14,7 @@
 
 #define IOM_LED_ADDRESS 0x08000016
 
-callback LED_CALLBACK[NUM_CALLBACK_LED] = {cb_light_led};
+const callback LED_CALLBACK[NUM_CALLBACK_LED] = {cb_light_led};
 
 static int fd = -1;
 static unsigned long *ledaddr = 0;

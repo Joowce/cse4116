@@ -9,7 +9,7 @@
 
 #define DEVICE_FND      0
 #define DEVICE_LCD      0
-#define DEVICE_LED      0
-#define DEVICE_DOT      1
+#define DEVICE_LED      1
+#define DEVICE_DOT      2
 
 #endif //EMBEDED_ITF_H
