@@ -15,7 +15,10 @@
 const callback DOT_CALLBACK[NUM_CALLBACK_DOT] = {cb_print_dot, cb_print_dot_num};
 static int dev = -1;
 
-
+/**
+ * dot matrix driver open
+ * @return
+ */
 int open_dot () {
     if (dev != -1) return dev;
     dev = open(FPGA_DOT_DEVICE, O_WRONLY);
@@ -26,25 +29,38 @@ int open_dot () {
     return dev;
 }
 
+/**
+ * dot matrix driver close
+ * @return
+ */
 int close_dot () {
     if(dev >= 0) close(dev);
     return 1;
 }
 
-
+/**
+ * print dot matrix
+ * @param data
+ * @return
+ */
 static int print_dot (const unsigned char* data) {
 //    int str_size;
 //
 //    dev = open_dot();
 //    if (dev < 0) return -1;
 //
-//    str_size=sizeof(data);
+//    str_size=sizeof(char) * DOT_SIZE;
 //    write(dev,data,str_size);
-    LOG_INFO("DEVICE::dot:print:: %s", data);
+    LOG_INFO("DEVICE::dot:print:: %.*s", DOT_SIZE, data);
 
     return 1;
 }
 
+/**
+ * print dot matrix number
+ * @param num
+ * @return
+ */
 static int print_dot_num (int num) {
     if (num < 0 || num > 9) {
         LOG_ERROR("DEVICE::dot:Invalid number, %d", num);

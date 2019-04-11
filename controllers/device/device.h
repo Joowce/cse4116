@@ -3,6 +3,7 @@
 //
 #include "../../services/callback.h"
 #include "../../services/mq/mq.h"
+#include "./itf.h"
 
 
 #ifndef EMBEDED_DEVICE_H
@@ -12,12 +13,7 @@ int open_drivers ();
 int close_drivers ();
 int exec_callback (MESSAGE);
 
-#define NUM_DEVICE      4
 
-#define DEVICE_FND      0
-#define DEVICE_LED      1
-#define DEVICE_LCD      2
-#define DEVICE_DOT      3
 
 typedef struct {
     callback_no_arg open;
