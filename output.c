@@ -28,6 +28,7 @@ int main (void) {
              LOG_INFO("No message");
              continue;
          }
+
          if (message -> device_type == NUM_DEVICE) {
              LOG_INFO("end output process");
              break;

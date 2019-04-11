@@ -12,7 +12,7 @@
 
 #include "log.h"
 
-static int  log_level = LOG_LVL_INFO;
+static int  log_level = LOG_LVL_DEBUG;
 
 /**
 * log level을 조정합니다.
@@ -26,7 +26,7 @@ int LOGsetLevel(int log_lvl)
     return tmp;
 }
 
-/*
+/**
 * log level을 최초로 요청할 때에는 환경변수의 설정을 읽습니다.
 */
 int LOGgetLevel(void)
@@ -60,7 +60,7 @@ int LOGgetLevel(void)
 }
 
 
-/*
+/**
 * LOGlogging(...) 로그 파일을 생성함.
 * log_type, 로그생성일시분초microseconds, process id, 소스파일, 함수명, 라인수, 오류 내용
 * 의 format으로 로그를 생성함.

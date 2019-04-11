@@ -40,7 +40,7 @@ static int print_dot (const unsigned char* data) {
 //
 //    str_size=sizeof(data);
 //    write(dev,data,str_size);
-    LOG_INFO("DEVICE::dot:print %s", data);
+    LOG_INFO("DEVICE::dot:print:: %s", data);
 
     return 1;
 }
@@ -69,8 +69,12 @@ int cb_print_dot(int cnt, ...) {
 
 int cb_print_dot_num(int cnt, ...) {
     va_list ap;
+    int * num;
+
     va_start(ap, cnt);
-    int result = print_dot_num((int) ap);
+    num = va_arg(ap, int*);
+    int result = print_dot_num(*num);
     va_end(ap);
+
     return result;
 }

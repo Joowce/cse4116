@@ -30,8 +30,8 @@ int LOGgetLevel(void);
 	LOG_TRACE("%s #### end.", #func)
 
 
-/*
-* Trace Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
+/**
+* Trace Log macro
 */
 #define LOG_TRACE(...) \
     do { \
@@ -40,8 +40,8 @@ int LOGgetLevel(void);
         } \
     } while(0)
 
-/*
-* debug Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
+/**
+* debug Log macro
 */
 #define LOG_DEBUG(...) \
     do { \
@@ -50,8 +50,8 @@ int LOGgetLevel(void);
         } \
     } while(0)
 
-/*
-* ¡ﬂø‰ ¡§∫∏ Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
+/**
+* info Log macro
 */
 #define LOG_INFO(...) \
     do { \
@@ -60,8 +60,8 @@ int LOGgetLevel(void);
         } \
     } while(0)
 
-/*
-* warning Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
+/**
+* warning Log macro
 */
 #define LOG_WARNING(...) \
     do { \
@@ -70,8 +70,8 @@ int LOGgetLevel(void);
         } \
     } while(0)
 
-/*
-* error Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
+/**
+* error Log macro
 */
 #define LOG_ERROR(...) \
     do { \
@@ -81,8 +81,8 @@ int LOGgetLevel(void);
     } while(0)
 
 
-/*
-* fatal error Log∏¶ ª˝º∫«œ¥¬ macro «‘ºˆ
+/**
+* fatal error Log macro
 */
 #define LOG_FATAL(...) \
     do { \
