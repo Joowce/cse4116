@@ -10,8 +10,6 @@
 #include "../../services/log/log.h"
 
 
-#define MAX_BUFF  LCD_MAX_BUFF
-#define LINE_BUFF LCD_LINE_BUFF
 #define FPGA_TEXT_LCD_DEVICE "/dev/fpga/text_lcd"
 
 const callback LCD_CALLBACK[NUM_CALLBACK_LCD] = {cb_print_lcd};
