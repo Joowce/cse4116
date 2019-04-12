@@ -7,6 +7,7 @@
 
 #include "read_key.h"
 #include "../../services/log/log.h"
+#include "rk_itf.h"
 
 #define KEY_PRESS   1
 #define KEY_RELEASE 0
@@ -45,15 +46,23 @@ int close_rk () {
 }
 
 
-int get_rk () {
+int get_pressed_rk () {
     struct input_event ev[BUFF_SIZE];
+    int result = RK_ERROR;
+
     int rd = read(fd, ev, sizeof(struct input_event) * BUFF_SIZE);
 
     if(rd < sizeof(struct inpue_event)) return RK_ERROR;
 
     LOG_INFO("read key:: Type[%d] Value[%d] Code[%d]", ev[0].type, ev[0].value, ev[0].code);
 
-    return ev[0].code;
+    switch (ev[0].code) {
+        case RK_CODE_BACK: result = RK_BACK; break;
+        case RK_CODE_VOL_DOWN: result = RK_VOL_DOWN; break;
+        case RK_CODE_VOL_UP: result = RK_VOL_UP; break;
+    }
+
+    return result;
 }
 
 
