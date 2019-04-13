@@ -7,42 +7,99 @@
 #include "services/log/log.h"
 #include "services/proc.h"
 #include "services/mq/mq.h"
+#include "services/shared_memory/shared_memory.h"
+#include "services/signal/signal.h"
 
 #include "controllers/device/client/device_client.h"
-#include "devices/led/light.h"
+#include "controllers/input/receiver/receiver.h"
+#include "controllers/mode/mode.h"
 
+#include "devices/read_key/rk_itf.h"
+
+#define RUNNING 1
+#define STOP    0
+
+static int MAIN_STATE = RUNNING;
+
+int stop_main_state () {
+    MAIN_STATE = STOP;
+}
 
 /**
  * 초기화
  * 1. 메세지 큐 생성
  * 2. shared memory 생성
- * 3. 첫번째 모드 설정
+ * 3. rk handler 등록
+ * 4. 첫번째 모드 설정
+ * 5. signal SIGUSR1, SIGUSR2 설정
  * @return
  */
 int initialize () {
     if(create_message_queue() == -1) return -1;
+    if(create_shm() == NULL) return -1;
+
+    if(remove_rk_handler() == -1) return -1;
+    if(remove_sw_handler() == -1) return -1;
+
+    add_rk_handler(RK_BACK, stop_main_state);
+    add_rk_handler(RK_VOL_DOWN, mode_prev);
+    add_rk_handler(RK_VOL_UP, mode_next);
+
+    mode_start();
+
+    init_rk_sig();
+    init_sw_sig();
+
 
     return 1;
 }
 
+/**
+ * 종료
+ * 1. signal USR1, USR2 삭제
+ * 2. 현재 진행중인 모드 종료
+ * 3. 메시지 큐 삭제
+ * 4. shared memory 삭제
+ * 5. rk handler 삭제
+ * @return
+ */
+int main_exit() {
+    ignore_signal(SIGUSR1);
+    ignore_signal(SIGUSR2);
+
+    mode_end();
+    remove_message_queue();
+    remove_shm();
+
+    remove_rk_handler();
+    remove_sw_handler();
+
+    return 1;
+}
+
+void kill_process (pid_t pid) {
+    send_signal(pid, SIGINT);
+}
+
 int main() {
-//    pid_t p_input;
+    pid_t p_input;
     pid_t p_output;
-    unsigned char data[10] = {0x3e,0x7f,0x63,0x73,0x73,0x6f,0x67,0x63,0x7f,0x3e};
 
     initialize();
 
-//    p_input = execf("input");
-//    LOG_INFO("forked input process: %d", p_input);
+    p_input = execf("input");
+    LOG_INFO("forked input process: %d", p_input);
 
     p_output = execf("output");
     LOG_INFO("forked output process: %d", p_output);
 
-    unsigned char string[4] = {1,1,1,1};
-    print_fnd(string);
-    msgbuf* msg = create_message(4, 0, 0, NULL);
+    while(MAIN_STATE) {
+        mode_execute();
+    }
 
-    if(send_message(msg) == -1) kill(p_output, SIGUSR1);
+    kill_process(p_input);
+    kill_process(p_output);
+    main_exit();
     return 0;
 }
 
