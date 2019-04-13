@@ -64,11 +64,11 @@ void* create_shm() {
     return shmaddr;
 }
 
-int write_shm (int addr, char* data, size_t size) {
+int write_shm (int addr, char* data, int size) {
     memcpy(shmaddr+addr, data, size);
     return SHM_SUCCESS;
 }
 
-void* get_shm_addr() {
-    return shmaddr;
+char* get_shm_addr() {
+    return (char *)shmaddr;
 }
