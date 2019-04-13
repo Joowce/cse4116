@@ -8,16 +8,35 @@
 #include "../../../services/signal/signal.h"
 #include "../../../services/log/log.h"
 
-int send_read_key (pid_t pid, char key_code) {
-    if(write_shm(SHM_ADDR_BUTT, (char *)&key_code, sizeof(char)) == SHM_ERROR) {
-        LOG_ERROR("can't write read_key code");
+
+typedef struct {
+    char name[15];
+    int addr;
+    char data;
+    pid_t pid;
+    int sig_num;
+}event_data;
+
+int write_send (event_data ev) {
+    if(write_shm(ev.addr, &(ev.data), sizeof(char)) == SHM_ERROR) {
+        LOG_ERROR("can't write [%s] data to [%d]", ev.name, ev.addr);
         return INPUT_ERROR;
     }
 
-    LOG_INFO("write read_key code to shared memory");
+    LOG_INFO("write [%s] data to shared memory", ev.name);
 
-    send_signal(pid, SIGUSR1);
-    LOG_INFO("send signal#[%d] to [%d] process", SIGUSR1, pid);
+    send_signal(ev.pid, ev.sig_num);
+    LOG_INFO("send signal#[%d] to [%d] process", ev.sig_num, ev.pid);
 
     return INPUT_SUCCESS;
+}
+
+int send_read_key (pid_t pid, char key_code) {
+    event_data ev = {"read_key", SHM_ADDR_RK, key_code, pid, SIGUSR1};
+    return write_send(ev);
+}
+
+int send_switch_button (pid_t pid, char button_num) {
+    event_data ev = {"switch_button", SHM_ADDR_BUTT, button_num, pid, SIGUSR2};
+    return write_send(ev);
 }
