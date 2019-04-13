@@ -8,7 +8,7 @@
 #include "switch_itf.h"
 #include "../../services/log/log.h"
 
-#define MAX_BUTTON  9
+
 #define FPGA_SWITCH "/dev/fpga_push_switch"
 
 #define PRESSED     1
@@ -45,12 +45,12 @@ int open_switch() {
 }
 
 int get_pressed_switch () {
-    unsigned char switch_buttons[MAX_BUTTON];
+    unsigned char switch_buttons[SWITCH_NUM];
     int i;
     read(dev, &switch_buttons, sizeof(switch_buttons));
 
     if (pressed_button == -1) {
-        for (i =0 ; i < MAX_BUTTON; i++) {
+        for (i =0 ; i < SWITCH_NUM; i++) {
             if (switch_buttons[i] == RELEASED) continue;
 
             pressed_button = i;

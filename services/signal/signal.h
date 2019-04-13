@@ -8,5 +8,6 @@
 
 struct sigaction create_signal_action(int signo, void (*handler) (int), const sigset_t* sa_mask);
 void send_signal (pid_t pid, int sig);
+void ignore_signal (int sig);
 
 #endif //EMBEDED_SIGNAL_H

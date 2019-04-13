@@ -22,3 +22,7 @@ void send_signal (pid_t pid, int sig) {
     kill(pid, sig);
     LOG_INFO("signal:: send [%d] signal to [%d] process", sig, pid);
 }
+
+void ignore_sig (int sig) {
+    signal(sig, SIG_IGN);
+}

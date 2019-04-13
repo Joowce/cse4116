@@ -9,4 +9,6 @@
 #define RK_VOL_UP      1
 #define RK_VOL_DOWN    2
 
+#define RK_NUM         3
+
 #endif //EMBEDED_RK_ITF_H
