@@ -3,7 +3,6 @@
 //
 
 #include <stdio.h>
-#include <signal.h>
 
 #include "signal.h"
 #include "../log/log.h"
@@ -23,6 +22,6 @@ void send_signal (pid_t pid, int sig) {
     LOG_INFO("signal:: send [%d] signal to [%d] process", sig, pid);
 }
 
-void ignore_sig (int sig) {
+void ignore_signal (int sig) {
     signal(sig, SIG_IGN);
 }
