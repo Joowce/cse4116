@@ -21,7 +21,7 @@ static int fd = -1;
 int open_rk () {
     if (fd != -1) return fd;
 
-    fd = open(FND_RK, O_RDONLY);
+    fd = open(FND_RK, O_RDONLY | O_NONBLOCK);
     if (fd == -1) {
         LOG_ERROR("read key:: Fail to open driver");
         return RK_ERROR;
@@ -53,8 +53,6 @@ int get_pressed_rk () {
     int rd = read(fd, ev, sizeof(struct input_event) * BUFF_SIZE);
 
     if(rd < sizeof(struct input_event)) return RK_ERROR;
-
-    LOG_INFO("read key:: Type[%d] Value[%d] Code[%d]", ev[0].type, ev[0].value, ev[0].code);
 
     switch (ev[0].code) {
         case RK_CODE_BACK: result = RK_BACK; break;

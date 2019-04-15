@@ -47,7 +47,7 @@ int open_switch() {
 int get_pressed_switch () {
     unsigned char switch_buttons[SWITCH_NUM];
     int i;
-    read(dev, &switch_buttons, sizeof(switch_buttons));
+    read(dev, switch_buttons, sizeof(switch_buttons));
 
     if (pressed_button == SWITCH_ERROR) {
         for (i =0 ; i < SWITCH_NUM; i++) {
