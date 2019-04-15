@@ -5,13 +5,27 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include "./services/log/log.h"
 #include "./controllers/device/device.h"
+#include "services/signal/signal.h"
+
+#define RUNNING 1
+#define STOP    0
+
+static int OUTPUT_STATE = RUNNING;
+
+void stop_output_state (int signo) {
+    OUTPUT_STATE = STOP;
+}
 
 int main (void) {
     int ppid = getppid();
     msgbuf* message = (msgbuf *)malloc(sizeof(msgbuf));
+    sigset_t set;
+    sigemptyset(&set);
+    create_signal_action(SIGINT, stop_output_state, &set);
 
     LOG_INFO("exec output process");
     LOG_INFO("output process:: parent pid: %d", ppid);
@@ -23,7 +37,9 @@ int main (void) {
     }
 
 
-    while(1) {
+
+
+    while(OUTPUT_STATE) {
          if (get_message(message) == -1) {
              LOG_INFO("No message");
              continue;
@@ -40,5 +56,6 @@ int main (void) {
 
     close_drivers();
     remove_message_queue();
+
     return 0;
 }

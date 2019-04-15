@@ -57,4 +57,4 @@ set(MODES ${MODE_CLOCK})
 
 add_executable(main main.c ${LOG} services/proc.h ${SIG} ${SHM} ${MQ} ${TIMER} devices/lcd/lcd_itf.h ${CTRL_DEV_CLIENT} ${CTRL_INPUT_RECEIVER} ${CTRL_MODE} ${MODES})
 add_executable(input input.c ${LOG} ${SHM} ${SIG} ${CTRL_INPUT_SENDER} ${INPUT_DEVICES})
-add_executable(output output.c ${LOG} ${MQ} ${CTRL_OUTPUT_DEV} ${OUTPUT_DEVICES})
+add_executable(output output.c ${LOG} ${MQ} ${SIG} ${CTRL_OUTPUT_DEV} ${OUTPUT_DEVICES})

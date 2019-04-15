@@ -11,7 +11,7 @@
 #include "../../services/log/log.h"
 
 
-#define FPGA_TEXT_LCD_DEVICE "/dev/fpga/text_lcd"
+#define FPGA_TEXT_LCD_DEVICE "/dev/fpga_text_lcd"
 
 const callback LCD_CALLBACK[NUM_CALLBACK_LCD] = {cb_print_lcd};
 
