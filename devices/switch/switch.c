@@ -15,7 +15,7 @@
 #define RELEASED    0
 
 static int dev = -1;
-static int pressed_button = -1;
+static int pressed_button = SWITCH_ERROR;
 
 int close_switch() {
     if (dev < 0) return SWITCH_SUCCESS;
@@ -49,7 +49,7 @@ int get_pressed_switch () {
     int i;
     read(dev, &switch_buttons, sizeof(switch_buttons));
 
-    if (pressed_button == -1) {
+    if (pressed_button == SWITCH_ERROR) {
         for (i =0 ; i < SWITCH_NUM; i++) {
             if (switch_buttons[i] == RELEASED) continue;
 
@@ -62,6 +62,6 @@ int get_pressed_switch () {
     if (switch_buttons[pressed_button] == PRESSED) return SWITCH_ERROR;
 
     i = pressed_button;
-    pressed_button = -1;
+    pressed_button = SWITCH_ERROR;
     return i;
 }
