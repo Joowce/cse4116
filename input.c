@@ -27,11 +27,15 @@ void stop_input_state (int signo) {
  * 초기화
  * 1. sigint 설정 (종료시 사용)
  * 2. shared memory 생성
+ * 3. driver open
  */
 int initial_input() {
     sigset_t set;
     sigemptyset(&set);
     create_signal_action(SIGINT, stop_input_state, &set);
+
+    open_rk();
+    open_switch();
 
     if (create_shm() == NULL) return -1;
     return 1;
@@ -40,10 +44,13 @@ int initial_input() {
 /**
  * 종료
  * 1. shared memory 삭제
+ * 2. driver close
  * @return
  */
 int exit_input() {
     remove_shm();
+    close_rk();
+    close_switch();
     return 1;
 }
 
