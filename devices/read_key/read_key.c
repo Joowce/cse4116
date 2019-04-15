@@ -60,6 +60,7 @@ int get_pressed_rk () {
         case RK_CODE_BACK: result = RK_BACK; break;
         case RK_CODE_VOL_DOWN: result = RK_VOL_DOWN; break;
         case RK_CODE_VOL_UP: result = RK_VOL_UP; break;
+        default: result = RK_ERROR; break;
     }
 
     return result;
