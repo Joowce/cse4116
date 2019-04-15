@@ -7,6 +7,7 @@
 #include <stdarg.h>
 
 #include "lcd.h"
+#include "lcd_itf.h"
 #include "../../services/log/log.h"
 
 
@@ -38,10 +39,10 @@ int close_lcd() {
 }
 
 int print_lcd (unsigned char* string) {
-//    dev = open_lcd();
-//    if (dev == -1) return LCD_ERROR;
-//
-//    write(dev, string, MAX_BUFF);
+    dev = open_lcd();
+    if (dev == -1) return LCD_ERROR;
+
+    write(dev, string, LCD_MAX_BUFF);
     LOG_INFO("LCD print:: %s", string);
     return LCD_SUCCESS;
 }

@@ -17,10 +17,10 @@ int main (void) {
     LOG_INFO("output process:: parent pid: %d", ppid);
 
     create_message_queue();
-//    if(open_drivers() == -1) {
-//        LOG_ERROR("fail open drivers, kill output process");
-//        exit(0);
-//    }
+    if(open_drivers() == -1) {
+        LOG_ERROR("fail open drivers, exit output process");
+        exit(0);
+    }
 
 
     while(1) {

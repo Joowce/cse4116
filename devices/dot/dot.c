@@ -44,13 +44,13 @@ int close_dot () {
  * @return
  */
 static int print_dot (const unsigned char* data) {
-//    int str_size;
-//
-//    dev = open_dot();
-//    if (dev < 0) return -1;
-//
-//    str_size=sizeof(char) * DOT_SIZE;
-//    write(dev,data,str_size);
+    int str_size;
+
+    dev = open_dot();
+    if (dev < 0) return -1;
+
+    str_size=sizeof(char) * DOT_SIZE;
+    write(dev,data,str_size);
     LOG_INFO("DEVICE::dot:print:: %.*s", DOT_SIZE, data);
 
     return 1;

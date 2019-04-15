@@ -62,7 +62,7 @@ int get_pressed_rk () {
         return RK_ERROR;
     }
 
-    if (ev[0].code != pressed_rk || ev[0].value == RK_ERROR) return RK_ERROR;
+    if (ev[0].code != pressed_rk || ev[0].value == KEY_PRESS) return RK_ERROR;
 
     switch (pressed_rk) {
         case RK_CODE_BACK: result = RK_BACK; break;

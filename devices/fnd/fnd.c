@@ -40,10 +40,10 @@ int close_fnd() {
 }
 
 int print_fnd (unsigned char* string) {
-//    dev = open_fnd();
-//    if (dev == -1) return FND_ERROR;
-//
-//    write(dev, string, FND_MAX_DIGIT);
+    dev = open_fnd();
+    if (dev == -1) return FND_ERROR;
+
+    write(dev, string, FND_MAX_DIGIT);
     LOG_INFO("FND print:: %d %d %d %d", string[0], string[1], string[2], string[3]);
     return FND_SUCCESS;
 }

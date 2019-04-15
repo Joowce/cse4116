@@ -43,7 +43,7 @@ int close_led () {
 }
 
 int light_led (unsigned char val) {
-//    *ledaddr = val;
+    *ledaddr = val;
 
     LOG_INFO("Light change %X", val);
 
