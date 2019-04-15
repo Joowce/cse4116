@@ -1,3 +1,4 @@
+set(CMAKE_C_COMPILER arm-none-linux-gnueabi-gcc)
 cmake_minimum_required(VERSION 3.13)
 project(embeded C)
 
