@@ -52,7 +52,7 @@ int get_pressed_rk () {
 
     int rd = read(fd, ev, sizeof(struct input_event) * BUFF_SIZE);
 
-    if(rd < sizeof(struct inpue_event)) return RK_ERROR;
+    if(rd < sizeof(struct input_event)) return RK_ERROR;
 
     LOG_INFO("read key:: Type[%d] Value[%d] Code[%d]", ev[0].type, ev[0].value, ev[0].code);
 
