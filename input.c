@@ -35,7 +35,7 @@ int initial_input() {
     sigemptyset(&set);
     create_signal_action(SIGINT, stop_input_state, &set);
 
-    if(open_rk() != 1 || open_switch() != 1) return -1;
+    if(open_rk() == -1 || open_switch() == -1) return -1;
 
     if (create_shm() == NULL) return -1;
     return 1;
