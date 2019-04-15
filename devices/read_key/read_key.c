@@ -21,7 +21,7 @@ static int fd = -1;
 int open_rk () {
     if (fd != -1) return fd;
 
-    fd = open(FND_RK, O_RDONLY | O_NONBLOCK);
+    fd = open(FND_RK, O_RDONLY);
     if (fd == -1) {
         LOG_ERROR("read key:: Fail to open driver");
         return RK_ERROR;
