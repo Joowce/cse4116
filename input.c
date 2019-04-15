@@ -32,7 +32,6 @@ void stop_input_state (int signo) {
  */
 int initial_input() {
     sigset_t set;
-
     sigemptyset(&set);
     create_signal_action(SIGINT, stop_input_state, &set);
 
@@ -56,50 +55,25 @@ int exit_input() {
     return 1;
 }
 
-void clean_up_rk (void *) {
-    close_rk();
-}
-
-void* run_rk (void* pid) {
-    int rk;
-    open_rk();
-    pthread_cleanup_push(clean_up_rk, NULL)
-    while(INPUT_STATE) {
-        rk = get_pressed_rk();
-        if (rk != RK_ERROR) send_read_key(*(int *)pid, (char)rk);
-    }
-    pthread_cleanup_pop(0)
-    pthread_exit(NULL);
-}
-
 
 int main (void) {
     pid_t p_main = getppid();
-    int t_id;
-    int status;
+    int rk;
     int switch_button;
-    pthread_t pthread;
 
     LOG_INFO("exec input process");
     LOG_INFO("input process:: parent pid: %d", p_main);
 
     initial_input();
 
-    t_id = pthread_create(&pthread, NULL, run_rk, (void *)&p_main);
-    LOG_INFO("input:: thread create [%d]",t_id);
-
     while(INPUT_STATE) {
-//        usleep(300);
-//        rk = get_pressed_rk();
-//        if (rk != RK_ERROR) send_read_key(p_main, (char) rk);
+        usleep(300);
+        rk = get_pressed_rk();
+        if (rk != RK_ERROR) send_read_key(p_main, (char) rk);
 
         switch_button = get_pressed_switch();
         if (switch_button != SWITCH_ERROR) send_switch_button(p_main, (char) switch_button);
     }
-
-    pthread_cancel(pthread);
-    pthread_join(pthread,(void *)&status);
-    LOG_INFO("main:: thread exit with status [%d]", status);
 
     exit_input();
     return 0;
