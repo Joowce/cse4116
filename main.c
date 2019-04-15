@@ -23,6 +23,11 @@ static int MAIN_STATE = RUNNING;
 
 int stop_main_state () {
     MAIN_STATE = STOP;
+    return 1;
+}
+
+void stop_main (int signo) {
+    stop_main_state();
 }
 
 /**
@@ -35,6 +40,7 @@ int stop_main_state () {
  * @return
  */
 int initialize () {
+    sigset_t set;
     if(create_message_queue() == -1) return -1;
     if(create_shm() == NULL) return -1;
 
@@ -44,6 +50,9 @@ int initialize () {
     add_rk_handler(RK_BACK, stop_main_state);
     add_rk_handler(RK_VOL_DOWN, mode_prev);
     add_rk_handler(RK_VOL_UP, mode_next);
+
+    sigemptyset(&set);
+    create_signal_action(SIGINT, stop_main, &set);
 
     mode_start();
 

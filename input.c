@@ -59,6 +59,7 @@ int main (void) {
     initial_input();
 
     while(INPUT_STATE) {
+        usleep(300);
         rk = get_pressed_rk();
         if (rk != RK_ERROR) send_read_key(p_main, (char) rk);
 
