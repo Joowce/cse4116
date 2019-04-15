@@ -35,8 +35,7 @@ int initial_input() {
     sigemptyset(&set);
     create_signal_action(SIGINT, stop_input_state, &set);
 
-    open_rk();
-    open_switch();
+    if(open_rk() != 1 || open_switch() != 1) return -1;
 
     if (create_shm() == NULL) return -1;
     return 1;
@@ -64,7 +63,10 @@ int main (void) {
     LOG_INFO("exec input process");
     LOG_INFO("input process:: parent pid: %d", p_main);
 
-    initial_input();
+    if (initial_input() == -1) {
+        LOG_ERROR("Error:: Fail initialize input process");
+        exit(0);
+    }
 
     while(INPUT_STATE) {
         usleep(300);
