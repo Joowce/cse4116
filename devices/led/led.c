@@ -50,8 +50,6 @@ int close_led () {
 }
 
 int light_led (unsigned char val) {
-    LOG_INFO("LED:: change adr[%p]", ledaddr);
-    LOG_INFO("LED:: change value[%X]", *ledaddr);
     *ledaddr = val;
     LOG_INFO("LED:: change %X", val);
 
@@ -64,8 +62,5 @@ int cb_light_led (int cnt, ...) {
 
     va_start(ap, cnt);
     arg = *va_arg(ap, unsigned char*);
-
-    LOG_INFO("LED:: get ap argument[%X]", arg);
-
     return light_led(arg);
 }

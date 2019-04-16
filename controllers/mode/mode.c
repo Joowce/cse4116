@@ -16,7 +16,6 @@ typedef struct{
     int num;
     int (*init)(void);
     int (*exit)(void);
-//    int (*exec)(void);
 }mode;
 
 static mode MODE_TABLE[MODE_NUM] = {
@@ -63,13 +62,6 @@ int mode_start() {
 int mode_end() {
     return mode_exit(MODE_TYPE);
 }
-
-//int mode_execute() {
-//    if (!is_valid_mode_num(MODE_TYPE)) return MODE_ERROR;
-//
-//    LOG_INFO("mode:: #[%d] mode execute", MODE_TYPE);
-//    return MODE_TABLE[MODE_TYPE].exec();
-//}
 
 int mode_next() {
     int before = MODE_TYPE++;

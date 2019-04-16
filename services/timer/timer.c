@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "timer.h"
+#include "../log/log.h"
 
 void start_timer (void(*func)(int), long nsec_interval) {
     struct itimerval timer;
@@ -24,4 +25,5 @@ void start_timer (void(*func)(int), long nsec_interval) {
     timer.it_interval.tv_usec = 0;
 
     setitimer(ITIMER_VIRTUAL, &timer, NULL);
+    LOG_INFO("TIMER:: start timer");
 }
