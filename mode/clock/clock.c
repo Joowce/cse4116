@@ -167,6 +167,7 @@ int reset_clock_change () {
     tmp_hour = hour;
     tmp_minutes = minutes;
 
+    draw_time(tmp_hour, tmp_minutes);
     LOG_INFO("clock:: Success to reset clock_change");
     return 1;
 }
