@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include "services/log/log.h"
 #include "services/proc.h"
@@ -109,12 +110,10 @@ int main() {
     p_output = execf("output");
     LOG_INFO("forked output process: %d", p_output);
 
-//    while(MAIN_STATE) {
-//        mode_execute();
-//    }
-
     wait(&status);
     LOG_INFO("main:: end wait status: [%d]", status);
+
+    stop_main_state();
 
     main_exit();
     return 0;

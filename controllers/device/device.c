@@ -40,9 +40,10 @@ int exec_callback (MESSAGE message) {
     callback cb = DEVICE_TABLE[message.device_type].callbacks[message.callback_num];
 
     if (cb == NULL) {
-        LOG_ERROR("No callback function:: device: %D, callback#: %d", message.device_type, message.callback_num);
+        LOG_ERROR("No callback function:: device: %d, callback#: %d", message.device_type, message.callback_num);
         return -1;
     }
 
+    LOG_INFO("CTRL_DEVICE:: callback device[%d] cb#[%d] cb[%p]",message.device_type, message.callback_num, cb);
     return cb(message.arg_cnt, message.data);
 }

@@ -22,37 +22,44 @@ static unsigned long *ledaddr = 0;
 int open_led () {
     fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) {
-        LOG_ERROR("Fail:: open led: /dev/mem");
+        LOG_ERROR("LED::Fail to open led: /dev/mem");
         return LED_ERROR;
     }
 
     ledaddr = (unsigned long *) mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, IOM_LED_ADDRESS);
     if (ledaddr == NULL) {
-        LOG_ERROR("Fail:: led: mmap error");
+        LOG_ERROR("LED:: Fail mmap error");
         close(fd);
         return LED_ERROR;
     }
 
+    LOG_INFO("LED:: Success to open mmap");
     return LED_SUCCESS;
 }
 
 int close_led () {
     munmap(ledaddr, 4096);
     close(fd);
+
+    LOG_INFO("LED:: Success to close mmap");
     return LED_SUCCESS;
 }
 
 int light_led (unsigned char val) {
     *ledaddr = val;
-
-    LOG_INFO("Light change %X", val);
+    LOG_INFO("LED:: change %X", val);
 
     return LED_SUCCESS;
 }
 
 int cb_light_led (int cnt, ...) {
     va_list ap;
-    va_start(ap, cnt);
+    unsigned char arg;
 
-    return light_led(*va_arg(ap, char *));
+    va_start(ap, cnt);
+    arg = *va_arg(ap, unsigned char*);
+
+    LOG_INFO("LED:: get ap argument[%c]", arg);
+
+    return light_led(arg);
 }
