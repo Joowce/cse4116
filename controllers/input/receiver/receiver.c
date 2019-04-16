@@ -106,7 +106,9 @@ int init_sw_sig() {
  */
 int add_rk_handler(int rk_code, callback_no_arg handler) {
     if (rk_code < 0 && rk_code >= RK_NUM) return RECEIVER_ERROR;
+
     rk_handlers[rk_code] = handler;
+    LOG_INFO("rk_handler:: Success to add handler");
     return RECEIVER_SUCCESS;
 }
 
@@ -118,7 +120,9 @@ int add_rk_handler(int rk_code, callback_no_arg handler) {
  */
 int add_sw_handler(int sw_num, callback_no_arg handler) {
     if (sw_num < 0 && sw_num >= SWITCH_NUM) return RECEIVER_ERROR;
+
     sw_handlers[sw_num] = handler;
+    LOG_INFO("sw_handler:: Success to add handler");
     return RECEIVER_SUCCESS;
 }
 

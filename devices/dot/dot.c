@@ -67,7 +67,7 @@ static int print_dot_num (int num) {
         return -1;
     }
 
-    return print_dot(fpga_number[num]);
+    return print_dot(dot_number[num]);
 }
 
 
