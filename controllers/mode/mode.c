@@ -55,7 +55,7 @@ int mode_end() {
 int mode_execute() {
     if (!is_valid_mode_num(MODE_TYPE)) return MODE_ERROR;
 
-    LOG_INFO("mode:: #[%d] mode execute", MODE_TYPE);
+//    LOG_INFO("mode:: #[%d] mode execute", MODE_TYPE);
     return MODE_TABLE[MODE_TYPE].exec();
 }
 
