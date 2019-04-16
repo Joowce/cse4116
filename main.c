@@ -20,7 +20,6 @@
 #define RUNNING 1
 #define STOP    0
 
-static int MAIN_STATE = RUNNING;
 static pid_t p_input = -1;
 static pid_t p_output = -1;
 
@@ -29,7 +28,6 @@ void kill_process (pid_t pid) {
 }
 
 int stop_main_state () {
-    MAIN_STATE = STOP;
 
     kill_process(p_input);
     LOG_INFO("main:: kill input process");
@@ -53,7 +51,6 @@ void stop_main (int signo) {
  * @return
  */
 int initialize () {
-    sigset_t set;
     if(create_message_queue() == -1) return -1;
     if(create_shm() == NULL) return -1;
 
@@ -64,8 +61,7 @@ int initialize () {
     add_rk_handler(RK_VOL_DOWN, mode_prev);
     add_rk_handler(RK_VOL_UP, mode_next);
 
-    sigemptyset(&set);
-    create_signal_action(SIGINT, stop_main, &set);
+    reg_signal_handler(SIGINT, stop_main);
 
     mode_start();
 
@@ -111,8 +107,6 @@ int main() {
 
     p_output = execf("output");
     LOG_INFO("forked output process: %d", p_output);
-
-    while(MAIN_STATE);
 
     wait(&status);
     LOG_INFO("main:: end wait status: [%d]", status);

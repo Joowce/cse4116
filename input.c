@@ -31,9 +31,7 @@ void stop_input_state (int signo) {
  * 3. driver open
  */
 int initial_input() {
-    sigset_t set;
-    sigemptyset(&set);
-    create_signal_action(SIGINT, stop_input_state, &set);
+    reg_signal_handler(SIGINT, stop_input_state);
 
     if(open_rk() == -1 || open_switch() == -1) return -1;
 

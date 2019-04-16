@@ -23,9 +23,8 @@ void stop_output_state (int signo) {
 int main (void) {
     int ppid = getppid();
     msgbuf* message = (msgbuf *)malloc(sizeof(msgbuf));
-    sigset_t set;
-    sigemptyset(&set);
-    create_signal_action(SIGINT, stop_output_state, &set);
+
+    reg_signal_handler(SIGINT, stop_output_state);
 
     LOG_INFO("OUTPUT:: start output process");
     LOG_INFO("OUTPUT:: parent pid: %d", ppid);

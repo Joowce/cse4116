@@ -7,14 +7,10 @@
 #include "signal.h"
 #include "../log/log.h"
 
-struct sigaction create_signal_action(int signo, void (*handler) (int), const sigset_t* sa_mask) {
-    struct sigaction act;
-    act.sa_handler = handler;
+int reg_signal_handler(int signo, void (*handler) (int)) {
 
-    if (sa_mask != NULL) act.sa_mask = *sa_mask;
-    sigaction(signo, &act, NULL);
-
-    return act;
+    signal(signo,handler);
+    return 1;
 }
 
 void send_signal (pid_t pid, int sig) {
