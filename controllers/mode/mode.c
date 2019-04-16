@@ -18,7 +18,7 @@ typedef struct{
 }mode;
 
 static mode MODE_TABLE[MODE_NUM] = {
-        {MODE_CLOCK, clock_init, clock_exit, clock_init}
+        {MODE_CLOCK, clock_init, clock_exit, clock_execute}
 };
 
 static int MODE_TYPE = MODE_CLOCK;
@@ -29,11 +29,14 @@ int is_valid_mode_num (int num) {
 
 int mode_exit(int num) {
     if (!is_valid_mode_num(num)) return MODE_ERROR;
+    LOG_INFO("CTRL_mode:: mode[%d] exit", num);
     return MODE_TABLE[num].exit();
 }
 
 int mode_init(int num) {
     if (!is_valid_mode_num(num)) return MODE_ERROR;
+
+    LOG_INFO("CTRL_mode:: mode[%d] initialize", num);
     return MODE_TABLE[num].init();
 }
 

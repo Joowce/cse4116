@@ -71,8 +71,10 @@ void execute_sw (int signo) {
  */
 int init_rk_sig () {
     sigset_t set;
+
     sigfillset(&set);
     sigprocmask(SIGUSR2, &set, NULL);
+
     create_signal_action(SIGUSR1, execute_rk, &set);
 
     LOG_INFO("CTRL_RECEIVER:: initial read key receiver");
@@ -88,8 +90,11 @@ int init_rk_sig () {
  */
 int init_sw_sig() {
     sigset_t set;
+
     sigfillset(&set);
+
     create_signal_action(SIGUSR2, execute_sw, &set);
+    LOG_INFO("CTRL_RECEIVER:: initial switch receiver");
     return RECEIVER_SUCCESS;
 }
 
