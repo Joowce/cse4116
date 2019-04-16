@@ -15,6 +15,9 @@
 #include "../../../devices/lcd/lcd_itf.h"
 #include "../../../devices/dot/dot_itf.h"
 
+#include "../../../devices/led/light.h"
+#include "../../../devices/dot/font.h"
+
 
 /**
  * fnd print data
@@ -94,4 +97,17 @@ int dot_print_num (int num) {
     free(buf);
 
     return result;
+}
+
+int dvice_init () {
+    unsigned char init_fnd_val[FND_MAX_DIGIT] = {0,};
+    unsigned char init_lcd_val[LCD_MAX_BUFF] = {0,};
+
+    dot_print(dot_set_blank);
+    print_fnd(init_fnd_val);
+    print_lcd(init_lcd_val);
+    light_led(LED_OFF);
+
+    LOG_INFO("CTRL_client:: Success to initialize devices");
+    return 1;
 }

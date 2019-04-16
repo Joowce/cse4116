@@ -27,4 +27,10 @@ int print_lcd (unsigned char*);
 int dot_print(unsigned char*);
 int dot_print_num (int num);
 
+
+/**
+ * Device init
+ */
+int dvice_init ();
+
 #endif //EMBEDED_DEVICE_CLIENT_H
