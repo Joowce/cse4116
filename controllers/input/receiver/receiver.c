@@ -43,6 +43,7 @@ void execute_rk (int signo) {
     }
 
     rk_handlers[rk]();
+    LOG_INFO("RK_HANDLER:: Success to excute rk handler");
 }
 
 /**
@@ -61,6 +62,7 @@ void execute_sw (int signo) {
         return;
     }
     sw_handlers[sw]();
+    LOG_INFO("SW_HANDLER:: Success to excute sw handler");
 }
 
 /**
@@ -75,8 +77,8 @@ int init_rk_sig () {
     sigfillset(&set);
     sigprocmask(SIGUSR2, &set, NULL);
 
-    create_signal_action(SIGUSR1, execute_rk, &set);
-
+//    create_signal_action(SIGUSR1, execute_rk, &set);
+    signal(SIGUSR1, execute_rk);
     LOG_INFO("CTRL_RECEIVER:: initial read key receiver");
 
     return RECEIVER_SUCCESS;
@@ -93,7 +95,8 @@ int init_sw_sig() {
 
     sigfillset(&set);
 
-    create_signal_action(SIGUSR2, execute_sw, &set);
+//    create_signal_action(SIGUSR2, execute_sw, &set);
+    signal(SIGUSR2, execute_sw);
     LOG_INFO("CTRL_RECEIVER:: initial switch receiver");
     return RECEIVER_SUCCESS;
 }
