@@ -117,7 +117,7 @@ void light_in_turn (int signo) {
  */
 int inc_hour (int *h) {
     (*h)++;
-    (*h)%= 24;
+    (*h) %= 24;
     return 1;
 }
 
@@ -142,7 +142,7 @@ int inc_minutes (int* h, int *m) {
  */
 int inc_hour_change () {
     inc_hour(&tmp_hour);
-    draw_time(tmp_minutes, tmp_hour);
+    draw_time(tmp_hour, tmp_minutes);
 
     LOG_INFO("clock:: increment hour to [%02d]", tmp_hour);
 
