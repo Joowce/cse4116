@@ -27,12 +27,12 @@ int main (void) {
     sigemptyset(&set);
     create_signal_action(SIGINT, stop_output_state, &set);
 
-    LOG_INFO("exec output process");
-    LOG_INFO("output process:: parent pid: %d", ppid);
+    LOG_INFO("OUTPUT:: start output process");
+    LOG_INFO("OUTPUT:: parent pid: %d", ppid);
 
     create_message_queue();
     if(open_drivers() == -1) {
-        LOG_ERROR("fail open drivers, exit output process");
+        LOG_ERROR("OUTPUT:: Fail open drivers, exit output process");
         exit(0);
     }
 
@@ -41,7 +41,7 @@ int main (void) {
 
     while(OUTPUT_STATE) {
          if (get_message(message) == -1) {
-             LOG_INFO("No message");
+             LOG_INFO("OUTPUT:: No message");
              continue;
          }
 
@@ -50,12 +50,13 @@ int main (void) {
              break;
          }
 
-         LOG_INFO("got message, try to execute call back :: %d, %d, %d", message->data.device_type, message->data.callback_num, message->data.arg_cnt);
+         LOG_INFO("OUTPUT:: got message, try to execute call back :: %d, %d, %d", message->data.device_type, message->data.callback_num, message->data.arg_cnt);
          exec_callback(message->data);
     }
 
     close_drivers();
     remove_message_queue();
 
+    LOG_INFO("-------- End OUTPUT --------");
     return 0;
 }
