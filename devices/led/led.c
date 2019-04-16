@@ -19,7 +19,7 @@
 const callback LED_CALLBACK[NUM_CALLBACK_LED] = {cb_light_led};
 
 static int fd = -1;
-static unsigned long *ledaddr = 0;
+static unsigned char *ledaddr = 0;
 
 int open_led () {
     unsigned long *fpga_base_addr;
@@ -29,14 +29,14 @@ int open_led () {
         return LED_ERROR;
     }
 
-    fpga_base_addr = (unsigned long *) mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, FPGA_BASE_ADDRESS);
+    fpga_base_addr = (unsigned long *)mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, FPGA_BASE_ADDRESS);
     if (fpga_base_addr == MAP_FAILED) {
         LOG_ERROR("LED:: Fail mmap error");
         close(fd);
         return LED_ERROR;
     }
 
-    ledaddr = (unsigned long*)((void*)fpga_base_addr+LED_ADDR);
+    ledaddr = (unsigned char*)((void*)fpga_base_addr+LED_ADDR);
     LOG_INFO("LED:: Success to open mmap");
     return LED_SUCCESS;
 }
