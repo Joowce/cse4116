@@ -50,6 +50,7 @@ int close_led () {
 }
 
 int light_led (unsigned char val) {
+    LOG_INFO("LED:: chane adr[%p]", ledaddr);
     *ledaddr = val;
     LOG_INFO("LED:: change %X", val);
 
