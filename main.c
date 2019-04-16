@@ -29,6 +29,8 @@ void kill_process (pid_t pid) {
 }
 
 int stop_main_state () {
+    MAIN_STATE = STOP;
+
     kill_process(p_input);
     LOG_INFO("main:: kill input process");
 
@@ -109,6 +111,8 @@ int main() {
 
     p_output = execf("output");
     LOG_INFO("forked output process: %d", p_output);
+
+    while(MAIN_STATE);
 
     wait(&status);
     LOG_INFO("main:: end wait status: [%d]", status);

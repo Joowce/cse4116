@@ -178,7 +178,7 @@ int start_change_mode () {
     light_in_turn(0);
     reset_clock_change();
     draw_time(tmp_hour, tmp_minutes);
-    LOG_INFO("CLOCK:: change_mode");
+    LOG_INFO("CLOCK:: Success to start change mode");
     return 1;
 }
 
