@@ -20,9 +20,19 @@
 #define STOP    0
 
 static int MAIN_STATE = RUNNING;
+static pid_t p_input = -1;
+static pid_t p_output = -1;
+
+void kill_process (pid_t pid) {
+    send_signal(pid, SIGINT);
+}
 
 int stop_main_state () {
-    MAIN_STATE = STOP;
+    kill_process(p_input);
+    LOG_INFO("main:: kill input process");
+
+    kill_process(p_output);
+    LOG_INFO("main::kill output process");
     return 1;
 }
 
@@ -88,13 +98,8 @@ int main_exit() {
     return 1;
 }
 
-void kill_process (pid_t pid) {
-    send_signal(pid, SIGINT);
-}
-
 int main() {
-    pid_t p_input;
-    pid_t p_output;
+    int status;
 
     initialize();
 
@@ -104,16 +109,12 @@ int main() {
     p_output = execf("output");
     LOG_INFO("forked output process: %d", p_output);
 
-    while(MAIN_STATE) {
-        mode_execute();
-    }
+//    while(MAIN_STATE) {
+//        mode_execute();
+//    }
 
-
-    kill_process(p_input);
-    LOG_INFO("main:: kill input process");
-
-    kill_process(p_output);
-    LOG_INFO("main::kill output process");
+    wait(&status);
+    LOG_INFO("main:: end wait status: [%d]", status);
 
     main_exit();
     return 0;
