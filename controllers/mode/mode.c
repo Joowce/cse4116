@@ -6,6 +6,8 @@
 
 #include "../../services/log/log.h"
 
+#include "../../controllers/device/client/device_client.h"
+
 #include "../../mode/clock/clock.h"
 
 #define MODE_CLOCK  0
@@ -14,11 +16,11 @@ typedef struct{
     int num;
     int (*init)(void);
     int (*exit)(void);
-    int (*exec)(void);
+//    int (*exec)(void);
 }mode;
 
 static mode MODE_TABLE[MODE_NUM] = {
-        {MODE_CLOCK, clock_init, clock_exit, clock_execute}
+        {MODE_CLOCK, clock_init, clock_exit}
 };
 
 static int MODE_TYPE = MODE_CLOCK;
@@ -29,8 +31,15 @@ int is_valid_mode_num (int num) {
 
 int mode_exit(int num) {
     if (!is_valid_mode_num(num)) return MODE_ERROR;
+
     LOG_INFO("CTRL_mode:: mode[%d] exit", num);
-    return MODE_TABLE[num].exit();
+    if(MODE_TABLE[num].exit() == -1) {
+        LOG_ERROR("CTRL_mode:: fail to exit mode");
+        return -1;
+    }
+
+    dvice_init();
+    return 1;
 }
 
 int mode_init(int num) {
@@ -55,12 +64,12 @@ int mode_end() {
     return mode_exit(MODE_TYPE);
 }
 
-int mode_execute() {
-    if (!is_valid_mode_num(MODE_TYPE)) return MODE_ERROR;
-
+//int mode_execute() {
+//    if (!is_valid_mode_num(MODE_TYPE)) return MODE_ERROR;
+//
 //    LOG_INFO("mode:: #[%d] mode execute", MODE_TYPE);
-    return MODE_TABLE[MODE_TYPE].exec();
-}
+//    return MODE_TABLE[MODE_TYPE].exec();
+//}
 
 int mode_next() {
     int before = MODE_TYPE++;
