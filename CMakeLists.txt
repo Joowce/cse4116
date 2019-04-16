@@ -1,6 +1,6 @@
 # cross compiler arm-none-linux-gnueabi-gcc
 set(CMAKE_C_COMPILER arm-none-linux-gnueabi-gcc)
-ADD_COMPILE_OPTIONS(-static)
+set(CMAKE_C_FLAGS -static)
 
 cmake_minimum_required(VERSION 3.13)
 project(embeded C)
