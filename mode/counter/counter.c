@@ -1,8 +1,6 @@
 //
 // Created by 민지우 on 2019-04-16.
 //
-#include <math.h>
-
 #include "counter.h"
 
 #include "../../services/log/log.h"
@@ -106,7 +104,9 @@ int draw_number () {
 }
 
 int inc_num_digit(int num, number_system ns, int digit) {
-    num += (int) pow(ns.number, digit);
+    int tmp = 1;
+    for (int i = 0; i < digit; i++, tmp *= ns.number);
+    num += tmp;
     num %= ns.upper_boundary;
 
     LOG_INFO("counter:: increment number_system[%d], digit[%d]:: result: [%d]", ns.number, digit, num);
