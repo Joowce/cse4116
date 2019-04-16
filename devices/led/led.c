@@ -12,7 +12,9 @@
 #include "./led_itf.h"
 #include "./led.h"
 
-#define IOM_LED_ADDRESS 0x08000016
+#define FPGA_BASE_ADDRESS 0x08000000
+#define LED_ADDR 0x16
+
 
 const callback LED_CALLBACK[NUM_CALLBACK_LED] = {cb_light_led};
 
@@ -20,19 +22,21 @@ static int fd = -1;
 static unsigned long *ledaddr = 0;
 
 int open_led () {
+    unsigned long *fpga_base_addr;
     fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) {
         LOG_ERROR("LED::Fail to open led: /dev/mem");
         return LED_ERROR;
     }
 
-    ledaddr = (unsigned long *) mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, IOM_LED_ADDRESS);
-    if (ledaddr == NULL) {
+    fpga_base_addr = (unsigned long *) mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, FPGA_BASE_ADDRESS);
+    if (fpga_base_addr == MAP_FAILED) {
         LOG_ERROR("LED:: Fail mmap error");
         close(fd);
         return LED_ERROR;
     }
 
+    ledaddr=(unsigned char*)((void*)fpga_base_addr+LED_ADDR);
     LOG_INFO("LED:: Success to open mmap");
     return LED_SUCCESS;
 }
@@ -59,7 +63,7 @@ int cb_light_led (int cnt, ...) {
     va_start(ap, cnt);
     arg = *va_arg(ap, unsigned char*);
 
-    LOG_INFO("LED:: get ap argument[%c]", arg);
+    LOG_INFO("LED:: get ap argument[%X]", arg);
 
     return light_led(arg);
 }
