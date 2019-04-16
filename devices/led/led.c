@@ -36,7 +36,7 @@ int open_led () {
         return LED_ERROR;
     }
 
-    ledaddr=(unsigned char*)((void*)fpga_base_addr+LED_ADDR);
+    ledaddr = (unsigned long*)((void*)fpga_base_addr+LED_ADDR);
     LOG_INFO("LED:: Success to open mmap");
     return LED_SUCCESS;
 }
