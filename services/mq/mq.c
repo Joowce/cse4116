@@ -89,5 +89,6 @@ int send_message (msgbuf* msg) {
 }
 
 int remove_message_queue () {
+    LOG_INFO("main:: remove message queue");
     return msgctl(MQ_ID, IPC_RMID, NULL);
 }

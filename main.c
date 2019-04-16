@@ -75,6 +75,7 @@ int initialize () {
 int main_exit() {
     ignore_signal(SIGUSR1);
     ignore_signal(SIGUSR2);
+    LOG_INFO("main:: ignore SIGUSR");
 
     mode_end();
     remove_message_queue();
@@ -83,6 +84,7 @@ int main_exit() {
     remove_rk_handler();
     remove_sw_handler();
 
+    LOG_INFO("main:: Success exit main process");
     return 1;
 }
 
@@ -106,8 +108,13 @@ int main() {
         mode_execute();
     }
 
+
     kill_process(p_input);
+    LOG_INFO("main:: kill input process");
+
     kill_process(p_output);
+    LOG_INFO("main::kill output process");
+
     main_exit();
     return 0;
 }
