@@ -69,7 +69,9 @@ int store_cur(int r, int c) {
 
 int clear_board() {
     int i;
-    for (i=0; i < MAX_ROW; i++, board[i] = 0);
+    for (i=0; i < MAX_ROW; i++) {
+        board[i] = 0;
+    }
     return print_board();
 }
 
@@ -115,13 +117,13 @@ int board_init() {
     init_cnt();
 
     add_sw_handler(SW1, reset_board_sw);
-    add_sw_handler(SW2, inc_row);
+    add_sw_handler(SW2, dec_row);
     add_sw_handler(SW3, change_cur_status);
     add_sw_handler(SW4, dec_col);
     add_sw_handler(SW5, fill_cur_val);
     add_sw_handler(SW6, inc_col);
     add_sw_handler(SW7, clear_board_sw);
-    add_sw_handler(SW8, dec_row);
+    add_sw_handler(SW8, inc_row);
     add_sw_handler(SW9, reverse_board);
 
     LOG_INFO("BOARD:: Success to init board");
