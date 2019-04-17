@@ -140,6 +140,7 @@ int inc_minutes (int* h, int *m) {
  * @return
  */
 int inc_hour_change () {
+    if (CLOCK_MODE != CLOCK_CHANGE_MODE) return 1;
     inc_hour(&tmp_hour);
     draw_time(tmp_hour, tmp_minutes);
 
@@ -153,6 +154,7 @@ int inc_hour_change () {
  * @return
  */
 int inc_minutes_change () {
+    if (CLOCK_MODE != CLOCK_CHANGE_MODE) return 1;
     inc_minutes(&tmp_hour, &tmp_minutes);
     draw_time(tmp_hour, tmp_minutes);
 
