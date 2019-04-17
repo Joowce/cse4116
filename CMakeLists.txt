@@ -52,8 +52,11 @@ set(INPUT_DEVICES ${DEVICE_SW} ${DEVICE_RK})
 set(MODE_DIR mode)
 
 set(MODE_CLOCK ${MODE_DIR}/clock/clock.c ${MODE_DIR}/clock/clock.h)
+set(MODE_COUNTER ${MODE_DIR}/counter/counter.c ${MODE_DIR}/counter/counter.h)
+set(MODE_EDITOR ${MODE_DIR}/editor/editor.c ${MODE_DIR}/editor/editor.h mode/util/util.c mode/util/util.h)
+set(MODE_BOARD ${MODE_DIR}/board/board.c ${MODE_DIR}/board/board.h mode/util/util.c mode/util/util.h)
 
-set(MODES ${MODE_CLOCK} mode/counter/counter.c mode/counter/counter.h mode/editer/editor.c mode/editer/editor.h)
+set(MODES ${MODE_CLOCK} ${MODE_COUNTER} ${MODE_EDITOR} ${MODE_BOARD})
 
 add_executable(main main.c ${LOG} services/proc.h ${SIG} ${SHM} ${MQ} ${TIMER} devices/lcd/lcd_itf.h ${CTRL_DEV_CLIENT} ${CTRL_INPUT_RECEIVER} ${CTRL_MODE} ${MODES})
 add_executable(input input.c ${LOG} ${SHM} ${SIG} ${CTRL_INPUT_SENDER} ${INPUT_DEVICES})

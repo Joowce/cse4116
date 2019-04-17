@@ -4,6 +4,8 @@
 #include <string.h>
 #include "editor.h"
 
+#include "../util/util.h"
+
 #include "../../services/log/log.h"
 
 #include "../../controllers/device/client/device_client.h"
@@ -21,9 +23,6 @@
 #define EDITOR_NUM      1
 
 #define EDITOR_SUCESS   1
-#define EDITOR_ERROR    -1
-
-#define MAX_CNT         9999
 
 
 int edit_text1();
@@ -58,7 +57,6 @@ static unsigned int MODE = EDITOR_ALPHA;
 static unsigned int prev_btn = -1;
 static unsigned int prev_count = 0;
 
-static unsigned char total_count = 0;
 static unsigned char text[LCD_MAX_BUFF + 1] = "";
 
 
@@ -83,25 +81,6 @@ char get_char(int sw) {
         prev_btn = sw;
     }
     return map_alpha[sw][prev_count];
-}
-
-int print_cnt () {
-    unsigned char tmp[FND_MAX_DIGIT];
-    int r;
-    int q = 1;
-    int i = 0;
-    for (i = 0; i < FND_MAX_DIGIT - 1; i++, q *= 10);
-
-    for (i = 0, r = total_count; i < FND_MAX_DIGIT; i++, r %= q, q /= 10) {
-        tmp[i] = r / q;
-    }
-    return print_fnd(tmp);
-}
-
-int inc_cnt () {
-    total_count++;
-    total_count %= MAX_CNT;
-    return print_cnt();
 }
 
 int edit_text (int sw) {
@@ -129,8 +108,7 @@ int edit_text (int sw) {
 int reset_text () {
     memset(text, 0, LCD_MAX_BUFF + 1);
 
-    total_count = 0;
-    print_cnt();
+    init_cnt();
 
     print_text();
 
@@ -193,7 +171,6 @@ int editor_init() {
 
 int editor_exit() {
     text[0] = '\0';
-    total_count = 0;
 
     remove_sw_handler();
 

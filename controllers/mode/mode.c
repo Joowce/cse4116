@@ -11,7 +11,7 @@
 
 #include "../../mode/clock/clock.h"
 #include "../../mode/counter/counter.h"
-#include "../../mode/editer/editor.h"
+#include "../../mode/editor/editor.h"
 
 #define MODE_CLOCK      0
 #define MODE_COUNTER    1
