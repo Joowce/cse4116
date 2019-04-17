@@ -13,12 +13,11 @@
 
 #define NUM_BUTTON  9
 #define PRESSED     1
-#define RELEASED    0
 
 
 static int dev = -1;
-static int pressed_button = SWITCH_ERROR;
-unsigned int switch_status [SWITCH_NUM] = {0,};
+static int prev_mask = 0;
+unsigned int status_mask [SWITCH_NUM] = {0,};
 
 int close_switch() {
     if (dev < 0) return SWITCH_SUCCESS;
@@ -52,26 +51,30 @@ unsigned int get_sw_mask (int num) {
     return 1 << num;
 }
 
-int get_switch_status (const unsigned char* switch_buttons) {
+int get_switch_mask (const unsigned char* switch_buttons) {
     int i;
     int temp = 0;
-    if (switch_status[0] == 0) {
+    if (status_mask[0] == 0) {
         for(i = 0; i < NUM_BUTTON; i++) {
-            switch_status[i] = get_sw_mask(i);
+            status_mask[i] = get_sw_mask(i);
         }
-        switch_status[SW10] = switch_status[SW2] | switch_status[SW3];
-        switch_status[SW11] = switch_status[SW5] | switch_status[SW6];
-        switch_status[SW12] = switch_status[SW8] | switch_status[SW9];
+        status_mask[SW10] = status_mask[SW2] | status_mask[SW3];
+        status_mask[SW11] = status_mask[SW5] | status_mask[SW6];
+        status_mask[SW12] = status_mask[SW8] | status_mask[SW9];
     }
 
     for (i = 0; i < NUM_BUTTON; i++) {
         if (switch_buttons[i] == PRESSED) {
-            temp |= switch_status[i];
+            temp |= status_mask[i];
         }
     }
+    return temp;
+}
 
+int convert_switch_num(int mask) {
+    int i=0;
     for (i = 0; i < SWITCH_NUM; i++) {
-        if ((temp ^ switch_status[i]) == 0) {
+        if ((mask ^ status_mask[i]) == 0) {
             return i;
         }
     }
@@ -80,19 +83,19 @@ int get_switch_status (const unsigned char* switch_buttons) {
 
 int get_pressed_switch () {
     unsigned char switch_buttons[NUM_BUTTON];
-    int i, cur_switch_status;
+    int cur_status_mask;
+    int switch_num;
     read(dev, switch_buttons, sizeof(switch_buttons));
-    cur_switch_status = get_switch_status(switch_buttons);
+    cur_status_mask = get_switch_mask(switch_buttons);
 
-    if (pressed_button == SWITCH_ERROR) {
-        pressed_button = cur_switch_status;
+    if (prev_mask == 0) {
+        prev_mask = cur_status_mask;
         return SWITCH_ERROR;
     }
 
-    if (cur_switch_status == pressed_button) return SWITCH_ERROR;
+    if ((cur_status_mask | prev_mask) != 0) return SWITCH_ERROR;
 
-    i = pressed_button;
-    pressed_button = cur_switch_status;
-
-    return i;
+    switch_num = convert_switch_num(prev_mask);
+    prev_mask = cur_status_mask;
+    return switch_num;
 }
