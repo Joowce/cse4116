@@ -5,6 +5,7 @@
 #include "mode.h"
 
 #include "../../services/log/log.h"
+#include "../../services/timer/timer.h"
 
 #include "../../controllers/device/client/device_client.h"
 
@@ -38,6 +39,7 @@ int mode_exit(int num) {
     }
 
     dvice_init();
+    timer_cancel();
     return 1;
 }
 
