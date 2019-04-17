@@ -8,17 +8,20 @@
 #define SWITCH_SUCCESS  1
 #define SWITCH_ERROR     -1
 
-#define SWITCH_NUM  9
+#define SWITCH_NUM  12
 
-#define SW1 0
-#define SW2 1
-#define SW3 2
-#define SW4 3
-#define SW5 4
-#define SW6 5
-#define SW7 6
-#define SW8 7
-#define SW9 8
+#define SW1     0
+#define SW2     1
+#define SW3     2
+#define SW4     3
+#define SW5     4
+#define SW6     5
+#define SW7     6
+#define SW8     7
+#define SW9     8
+#define SW10    9
+#define SW11    10
+#define SW12    11
 
 
 #endif //EMBEDED_SWITCH_ITF_H
