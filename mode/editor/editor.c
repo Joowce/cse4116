@@ -107,9 +107,6 @@ int edit_text (int sw) {
 
 int reset_text () {
     memset(text, 0, LCD_MAX_BUFF + 1);
-
-    init_cnt();
-
     print_text();
 
     LOG_INFO("EDITOR:: Success to reset text");
