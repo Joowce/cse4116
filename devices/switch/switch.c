@@ -18,7 +18,7 @@
 
 static int dev = -1;
 static int pressed_button = SWITCH_ERROR;
-unsigned int switch_status [SWITCH_NUM];
+unsigned int switch_status [SWITCH_NUM] = {0,};
 
 int close_switch() {
     if (dev < 0) return SWITCH_SUCCESS;
@@ -79,7 +79,7 @@ int get_switch_status (const unsigned char* switch_buttons) {
 }
 
 int get_pressed_switch () {
-    unsigned char switch_buttons[SWITCH_NUM];
+    unsigned char switch_buttons[NUM_BUTTON];
     int i, cur_switch_status;
     read(dev, switch_buttons, sizeof(switch_buttons));
     cur_switch_status = get_switch_status(switch_buttons);
