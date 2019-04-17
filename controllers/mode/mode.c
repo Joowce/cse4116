@@ -59,8 +59,8 @@ int mode_next() {
 
 int mode_prev() {
     int before = MODE_TYPE--;
-
-    MODE_TYPE %= MODE_NUM;
+    MODE_TYPE += MODE_NUM
+    (MODE_TYPE) %= MODE_NUM;
     return mode_change(MODE_TYPE, before);
 }
 

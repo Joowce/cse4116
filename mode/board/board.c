@@ -181,13 +181,13 @@ int dec_col () {
 
 
 int fill_dot (int r, int c) {
-    unsigned char mask = 1 << c;
+    unsigned char mask = 1 << (MAX_COL - c - 1);
     board[r] |= mask;
     return BOARD_SUCCESS;
 }
 
 int reset_dot(int r, int c) {
-    unsigned char mask = 1 << c;
+    unsigned char mask = 1 << (MAX_COL - c - 1);
     mask = ~mask;
     board[r] &= mask;
     return BOARD_SUCCESS;
@@ -200,7 +200,7 @@ int change_dot(int r, int c) {
 }
 
 int get_board_status (int r, int c) {
-    unsigned char mask = 1 << c;
+    unsigned char mask = 1 << (MAX_COL - c - 1);
     return (board[r] & mask) > 1 ? BOARD_SUCCESS : BOARD_ERROR;
 }
 
