@@ -11,7 +11,6 @@
 
 #include "../../devices/lcd/lcd_itf.h"
 #include "../../devices/switch/switch_itf.h"
-#include "../../devices/dot/font/font.h"
 #include "../../devices/fnd/fnd_itf.h"
 
 
@@ -52,6 +51,7 @@ static unsigned char map_alpha[CNT_BUTTON][CNT_BUTTON_MODE] = {
         {'V', 'T', 'U', '8'},
         {'Y', 'W', 'X', '9'}
 };
+unsigned char dot_alpha_a[10] = {0x1c,0x36,0x63,0x63,0x63,0x7f,0x7f,0x63,0x63,0x63};
 static unsigned int MODE = EDITOR_ALPHA;
 
 static unsigned int prev_btn = -1;

@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 
-#include "font/font.h"
+#include "font.h"
 #include "../../services/log/log.h"
 #include "./dot.h"
 
