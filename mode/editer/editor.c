@@ -141,7 +141,7 @@ int reset_text () {
 int change_editor_mode () {
     if (MODE == EDITOR_ALPHA) start_mode_num();
     else start_mode_alpha();
-
+    inc_cnt();
     LOG_INFO("EDITOR:: Success to change mode to [%d]", MODE);
     return EDITOR_SUCESS;
 }
