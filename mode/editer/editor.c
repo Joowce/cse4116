@@ -105,7 +105,7 @@ int edit_text (int sw) {
     char c;
     unsigned char temp[LCD_MAX_BUFF];
 
-    if (sw == prev_btn) text[len - 1] = '\0';
+    if (sw == prev_btn && sw != SW12) text[len - 1] = '\0';
 
     if (len == LCD_MAX_BUFF) {
         strncpy((char *)temp, (char *)(&text[1]), len - 1);
@@ -239,6 +239,6 @@ int edit_text9() {
 }
 
 int edit_text10() {
-    return edit_text(SW10);
+    return edit_text(SW12);
 }
 
