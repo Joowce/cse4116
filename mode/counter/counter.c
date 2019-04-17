@@ -89,7 +89,7 @@ int counter_exit() {
 void convert_num_str (number_system ns, int num, unsigned char* num_str) {
     int i;
     int q = num;
-    char temp[DIGIT];
+    char temp[FND_MAX_DIGIT];
     for (i = FND_MAX_DIGIT - 1; i >= FND_MAX_DIGIT - DIGIT; i--) {
         num_str[i] = (unsigned char)((q % ns.number));
         temp[i] = num_str[i] + '0';
