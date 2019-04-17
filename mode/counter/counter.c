@@ -88,7 +88,7 @@ void convert_num_str (number_system ns, int num, unsigned char* num_str) {
     int i;
     int q = num;
     for (i = DIGIT - 1; i >= 0; i--) {
-        num_str[i] = (char)((q % ns.number) + '0');
+        num_str[i] = (unsigned char)((q % ns.number));
         q = q / ns.number;
     }
     LOG_INFO("counter:: convert:: NS:[%d]: [%d] to [%s]", ns.number, num, num_str);

@@ -11,9 +11,11 @@
 
 #include "../../mode/clock/clock.h"
 #include "../../mode/counter/counter.h"
+#include "../../mode/editer/editor.h"
 
 #define MODE_CLOCK      0
 #define MODE_COUNTER    1
+#define MODE_EDITOR     2
 
 typedef struct{
     int num;
@@ -29,7 +31,8 @@ static int mode_change(int, int);
 
 static mode MODE_TABLE[MODE_NUM] = {
         {MODE_CLOCK, clock_init, clock_exit},
-        {MODE_COUNTER, counter_init, counter_exit}
+        {MODE_COUNTER, counter_init, counter_exit},
+        {MODE_EDITOR, editor_init, editor_exit}
 };
 static int MODE_TYPE = MODE_CLOCK;
 
