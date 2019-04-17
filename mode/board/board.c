@@ -55,13 +55,15 @@ int fill_cur_val () {
 }
 
 int restore_cur () {
-    if (cur_val == BOARD_SUCCESS) reset_dot(cur_r, cur_c);
+    if (cur_val == BOARD_ERROR) reset_dot(cur_r, cur_c);
     else fill_dot(cur_r, cur_r);
+    LOG_INFO("BOARD:: Success to restore board[%d][%d]: [%d]", cur_r, cur_c, cur_val);
     return BOARD_SUCCESS;
 }
 
 int store_cur(int r, int c) {
     cur_val = get_board_status(r, c);
+    LOG_INFO("BOARD:: Success to store board[%d][%d]: [%d]", r, c, cur_val);
     return BOARD_SUCCESS;
 }
 
@@ -74,6 +76,7 @@ int clear_board() {
 int reset_board() {
     cur_r = 0;
     cur_c = 0;
+    clear_board();
     show_cur();
     return print_board();
 }
@@ -87,7 +90,6 @@ int change_cur_status() {
 int reverse_board() {
     unsigned char mask = 1 << MAX_COL;
     mask--;
-    mask = ~(mask);
     cur_val = cur_val == BOARD_SUCCESS ? BOARD_ERROR : BOARD_SUCCESS;
     for (int i = 0; i < MAX_ROW; i++) {
         board[i] = ~board[i];
@@ -150,7 +152,7 @@ int dec_row() {
     int temp;
     restore_cur();
 
-    temp = (cur_r - 1) % MAX_ROW;
+    temp = (cur_r - 1 + MAX_ROW) % MAX_ROW;
     store_cur(temp, cur_c);
     cur_r = temp;
     inc_cnt();
@@ -172,7 +174,7 @@ int dec_col () {
     int temp;
     restore_cur();
 
-    temp = (cur_c - 1) % MAX_COL;
+    temp = (cur_c - 1 + MAX_COL) % MAX_COL;
     store_cur(cur_r, temp);
     cur_c = temp;
     inc_cnt();
