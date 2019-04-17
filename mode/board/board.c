@@ -61,13 +61,13 @@ int restore_cur () {
     if (cur_val == DOT_EMPTY) reset_dot(cur_r, cur_c);
     else fill_dot(cur_r, cur_c);
     LOG_INFO("BOARD:: Success to restore board[%d][%d]: [%d]", cur_r, cur_c, cur_val);
-    return BOARD_SUCCESS;
+    return print_board();
 }
 
 int store_cur(int r, int c) {
     cur_val = get_board_status(r, c);
     LOG_INFO("BOARD:: Success to store board[%d][%d]: [%d]", r, c, cur_val);
-    return BOARD_SUCCESS;
+    return print_board();
 }
 
 int clear_board() {
