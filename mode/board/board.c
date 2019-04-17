@@ -19,6 +19,8 @@
 #define CUR_SHOW        1
 #define CUR_HIDE        0
 #define ONE_SEC         1
+#define DOT_FILL        1
+#define DOT_EMPTY       0
 
 int inc_row ();
 int dec_row ();
@@ -55,8 +57,8 @@ int fill_cur_val () {
 }
 
 int restore_cur () {
-    if (cur_val == BOARD_ERROR) reset_dot(cur_r, cur_c);
-    else fill_dot(cur_r, cur_r);
+    if (cur_val == DOT_EMPTY) reset_dot(cur_r, cur_c);
+    else fill_dot(cur_r, cur_c);
     LOG_INFO("BOARD:: Success to restore board[%d][%d]: [%d]", cur_r, cur_c, cur_val);
     return BOARD_SUCCESS;
 }
@@ -205,7 +207,7 @@ int change_dot(int r, int c) {
 
 int get_board_status (int r, int c) {
     unsigned char mask = 1 << (MAX_COL - c - 1);
-    return (board[r] & mask) > 1 ? BOARD_SUCCESS : BOARD_ERROR;
+    return (board[r] & mask) > 1 ? DOT_FILL : DOT_EMPTY;
 }
 
 int print_board() {
