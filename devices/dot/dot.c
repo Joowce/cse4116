@@ -12,6 +12,8 @@
 
 #define FPGA_DOT_DEVICE "/dev/fpga_dot"
 
+static int print_dot (const unsigned char* data)
+
 const callback DOT_CALLBACK[NUM_CALLBACK_DOT] = {cb_print_dot, cb_print_dot_num};
 static int dev = -1;
 
@@ -34,7 +36,10 @@ int open_dot () {
  * @return
  */
 int close_dot () {
-    if(dev >= 0) close(dev);
+    if(dev >= 0) {
+        print_dot(dot_set_blank);
+        close(dev);
+    }
     return 1;
 }
 

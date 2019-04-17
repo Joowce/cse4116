@@ -13,6 +13,7 @@
 
 
 #define FPGA_FND_DEVICE "/dev/fpga_fnd"
+static int print_fnd (unsigned char* string);
 
 const callback FND_CALLBACK[NUM_CALLBACK_FND] = {cb_print_fnd};
 
@@ -32,8 +33,10 @@ int open_fnd() {
 }
 
 int close_fnd() {
+    unsigned char tmp[FND_MAX_DIGIT] = {0,};
     if (dev == -1) return FND_SUCCESS;
 
+    print_fnd(tmp);
     close(dev);
     LOG_INFO("Success:: close FND driver");
     return FND_SUCCESS;

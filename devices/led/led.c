@@ -11,6 +11,7 @@
 #include "../../services/log/log.h"
 #include "./led_itf.h"
 #include "./led.h"
+#include "light.h"
 
 #define FPGA_BASE_ADDRESS 0x08000000
 #define LED_ADDR 0x16
@@ -41,7 +42,8 @@ int open_led () {
     return LED_SUCCESS;
 }
 
-int close_led () {
+int close_led (){
+    *ledaddr = LED_OFF;
     munmap(ledaddr, 4096);
     close(fd);
 

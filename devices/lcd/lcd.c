@@ -13,6 +13,8 @@
 
 #define FPGA_TEXT_LCD_DEVICE "/dev/fpga_text_lcd"
 
+static int print_lcd (unsigned char* string);
+
 const callback LCD_CALLBACK[NUM_CALLBACK_LCD] = {cb_print_lcd};
 
 static int dev = -1;
@@ -31,8 +33,10 @@ int open_lcd() {
 }
 
 int close_lcd() {
+    unsigned char tmp [LCD_MAX_BUFF] = {0,};
     if (dev == -1) return LCD_SUCCESS;
 
+    print_lcd(tmp);
     close(dev);
     LOG_INFO("Success:: close LCD driver");
     return LCD_SUCCESS;
