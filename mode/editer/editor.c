@@ -69,7 +69,7 @@ int print_text() {
 
 char get_char(int sw) {
     if (sw == SW12) return ' ';
-    if (MODE == EDITOR_NUM) return sw + '0';
+    if (MODE == EDITOR_NUM) return sw + '1';
 
     if (sw == prev_btn) {
         prev_count++;
@@ -127,8 +127,9 @@ int reset_text () {
     total_count = 0;
     print_cnt();
 
-    LOG_INFO("EDITOR:: Success to reset text");
+    print_text();
 
+    LOG_INFO("EDITOR:: Success to reset text");
     return SWITCH_SUCCESS;
 }
 
