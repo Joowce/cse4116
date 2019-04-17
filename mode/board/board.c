@@ -7,6 +7,7 @@
 #include "../util/util.h"
 
 #include "../../services/timer/timer.h"
+#include "../../services/log/log.h"
 
 #include "../../controllers/device/client/device_client.h"
 #include "../../controllers/input/receiver/receiver.h"
@@ -93,7 +94,9 @@ int reverse_board() {
         board[i] &= mask;
     }
     inc_cnt();
-    return print_board();
+    print_board();
+    LOG_INFO("BOARD:: Success to reverse board");
+    return BOARD_SUCCESS;
 }
 
 int clear_board_sw() {
@@ -118,6 +121,8 @@ int board_init() {
     add_sw_handler(SW7, clear_board_sw);
     add_sw_handler(SW8, dec_row);
     add_sw_handler(SW9, reverse_board);
+
+    LOG_INFO("BOARD:: Success to init board");
     return BOARD_SUCCESS;
 }
 
