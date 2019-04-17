@@ -93,7 +93,10 @@ int get_pressed_switch () {
         return SWITCH_ERROR;
     }
 
-    if ((cur_status_mask & prev_mask) > 0) return SWITCH_ERROR;
+    if ((cur_status_mask & prev_mask) > 0) {
+        prev_mask |= cur_status_mask;
+        return SWITCH_ERROR;
+    }
 
     switch_num = convert_switch_num(prev_mask);
     prev_mask = cur_status_mask;
