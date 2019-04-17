@@ -52,6 +52,7 @@ static unsigned char map_alpha[CNT_BUTTON][CNT_BUTTON_MODE] = {
         {'Y', 'W', 'X', '9'}
 };
 unsigned char dot_alpha_a[10] = {0x1c,0x36,0x63,0x63,0x63,0x7f,0x7f,0x63,0x63,0x63};
+unsigned char dot_num_1[10] = {0x0c,0x1c,0x1c,0x0c,0x0c,0x0c,0x0c,0x0c,0x0c,0x1e};
 static unsigned int MODE = EDITOR_ALPHA;
 
 static unsigned int prev_btn = -1;
@@ -153,7 +154,7 @@ int start_mode_num () {
     prev_count = 0;
     prev_btn = -1;
 
-    dot_print(dot_number[1]);
+    dot_print(dot_num_1);
     LOG_INFO("EDITOR:: Start number mode");
     return EDITOR_SUCESS;
 }
