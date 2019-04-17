@@ -36,7 +36,7 @@ int edit_text6();
 int edit_text7();
 int edit_text8();
 int edit_text9();
-int edit_text10()
+int edit_text10();
 static int start_mode_alpha();
 static int start_mode_num ();
 
