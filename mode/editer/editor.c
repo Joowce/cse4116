@@ -15,7 +15,7 @@
 
 
 #define CNT_BUTTON  9
-#define CNT_BUTTON_MODE 4
+#define CNT_BUTTON_MODE 3
 
 #define EDITOR_ALPHA    0
 #define EDITOR_NUM      1
@@ -41,15 +41,15 @@ static int start_mode_num ();
 
 
 static unsigned char map_alpha[CNT_BUTTON][CNT_BUTTON_MODE] = {
-        {'Z', '.', 'Q', '1'},
-        {'C', 'A', 'B', '2'},
-        {'F', 'D', 'E', '3'},
-        {'I', 'G', 'H', '4'},
-        {'L', 'J', 'K', '5'},
-        {'O', 'M', 'N', '6'},
-        {'S', 'P', 'R', '7'},
-        {'V', 'T', 'U', '8'},
-        {'Y', 'W', 'X', '9'}
+        {'Z', '.', 'Q'},
+        {'C', 'A', 'B'},
+        {'F', 'D', 'E'},
+        {'I', 'G', 'H'},
+        {'L', 'J', 'K'},
+        {'O', 'M', 'N'},
+        {'S', 'P', 'R'},
+        {'V', 'T', 'U'},
+        {'Y', 'W', 'X'}
 };
 unsigned char dot_alpha_a[10] = {0x1c,0x36,0x63,0x63,0x63,0x7f,0x7f,0x63,0x63,0x63};
 unsigned char dot_num_1[10] = {0x0c,0x1c,0x1c,0x0c,0x0c,0x0c,0x0c,0x0c,0x0c,0x1e};
@@ -88,9 +88,8 @@ int print_cnt () {
     int i = 0;
     for (i = 0; i < FND_MAX_DIGIT - 1; i++, q *= 10);
 
-    for (i = 0, r = total_count; i < FND_MAX_DIGIT; i++) {
+    for (i = 0, r = total_count; i < FND_MAX_DIGIT; i++, r %= q, q /= 10) {
         tmp[i] = r / q;
-        r %= q;
     }
     return print_fnd(tmp);
 }
@@ -134,8 +133,8 @@ int reset_text () {
 }
 
 int change_editor_mode () {
-    if (MODE == EDITOR_ALPHA) start_mode_alpha();
-    else start_mode_num();
+    if (MODE == EDITOR_ALPHA) start_mode_num();
+    else start_mode_alpha();
 
     LOG_INFO("EDITOR:: Success to change mode to [%d]", MODE);
     return EDITOR_SUCESS;
