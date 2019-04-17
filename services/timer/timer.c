@@ -14,7 +14,7 @@ struct itimerval set_time_val;
 
 void timer_start (void(*func)(int), long nsec_interval) {
 
-    sigset(SIGVTALRM, func);
+    sigset(SIGALRM, func);
 
     set_time_val.it_value.tv_sec = nsec_interval;
     set_time_val.it_value.tv_usec = 0;
@@ -22,14 +22,14 @@ void timer_start (void(*func)(int), long nsec_interval) {
     set_time_val.it_interval.tv_sec = nsec_interval;
     set_time_val.it_interval.tv_usec = 0;
 
-    setitimer(ITIMER_VIRTUAL, &set_time_val, NULL);
+    setitimer(ITIMER_REAL, &set_time_val, NULL);
     LOG_INFO("TIMER:: start timer");
 }
 
 void timer_cancel () {
     struct itimerval prev_time_val, get_time_val;
 
-    if (getitimer(ITIMER_VIRTUAL, &prev_time_val) == -1) {
+    if (getitimer(ITIMER_REAL, &prev_time_val) == -1) {
         LOG_ERROR("TIMER:: can not get timer");
         return;
     }
@@ -39,9 +39,9 @@ void timer_cancel () {
     set_time_val.it_interval.tv_sec = 0;
     set_time_val.it_interval.tv_usec = 0;
 
-    setitimer(ITIMER_VIRTUAL, &set_time_val, NULL);
+    setitimer(ITIMER_REAL, &set_time_val, NULL);
 
-    if (getitimer(ITIMER_VIRTUAL, &get_time_val) == -1) {
+    if (getitimer(ITIMER_REAL, &get_time_val) == -1) {
         LOG_ERROR("TIMER:: can not get timer");
         return;
     }

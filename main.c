@@ -20,6 +20,8 @@
 #define RUNNING 1
 #define STOP    0
 
+static int MAIN_STATE = RUNNING;
+
 static pid_t p_input = -1;
 static pid_t p_output = -1;
 
@@ -28,7 +30,7 @@ void kill_process (pid_t pid) {
 }
 
 int stop_main_state () {
-
+    MAIN_STATE = STOP;
     kill_process(p_input);
     LOG_INFO("main:: kill input process");
 
@@ -107,6 +109,10 @@ int main() {
 
     p_output = execf("output");
     LOG_INFO("forked output process: %d", p_output);
+
+    while(MAIN_STATE == RUNNING){
+        usleep(300);
+    }
 
     wait(&status);
     LOG_INFO("main:: end wait status: [%d]", status);
