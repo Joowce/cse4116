@@ -10,7 +10,6 @@
 #define CLOCK_OFF           -1
 
 int clock_init();
-//int clock_execute();
 int clock_exit();
 
 #endif //EMBEDED_CLOCK_H

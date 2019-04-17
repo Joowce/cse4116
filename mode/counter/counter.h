@@ -5,4 +5,7 @@
 #ifndef EMBEDED_COUNTER_H
 #define EMBEDED_COUNTER_H
 
+int counter_init();
+int counter_exit();
+
 #endif //EMBEDED_COUNTER_H

@@ -13,7 +13,6 @@ int mode_start();
 
 int mode_next();
 int mode_prev();
-int mode_execute();
 
 #define MODE_NUM    4
 
