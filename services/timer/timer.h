@@ -5,6 +5,7 @@
 #ifndef EMBEDED_TIMER_H
 #define EMBEDED_TIMER_H
 
-void start_timer (void(*func)(int), long nsec_interval);
+void timer_start (time_t tid, void(*func)(int), long nsec_interval);
+void timer_cancel ();
 
 #endif //EMBEDED_TIMER_H
