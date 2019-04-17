@@ -1,6 +1,7 @@
 //
 // Created by 민지우 on 2019-04-16.
 //
+#include <stdio.h>
 #include "counter.h"
 
 #include "../../services/log/log.h"
@@ -71,7 +72,7 @@ int counter_init() {
     start_num_system();
     draw_number();
 
-    LOG_INFO("counter:: Success to initialize");
+    LOG_INFO("COUNTER:: Success to initialize");
     return 1;
 }
 
@@ -80,18 +81,20 @@ int counter_exit() {
     idx_ns = 0;
 
     remove_sw_handler();
-    LOG_INFO("counter:: Success to exit counter mode");
+    LOG_INFO("COUNTER:: Success to exit counter mode");
     return 1;
 }
 
 void convert_num_str (number_system ns, int num, unsigned char* num_str) {
     int i;
     int q = num;
+    char temp[DIGIT];
     for (i = DIGIT - 1; i >= 0; i--) {
         num_str[i] = (unsigned char)((q % ns.number));
+        temp[i] = num_str[i] + '0';
         q = q / ns.number;
     }
-    LOG_INFO("counter:: convert:: NS:[%d]: [%d] to [%s]", ns.number, num, num_str);
+    LOG_INFO("COUNTER:: convert:: NS[%d]: [%d] to [%s]", ns.number, num, temp);
 }
 
 int draw_number () {
@@ -99,7 +102,6 @@ int draw_number () {
     convert_num_str(NS[idx_ns], cnt, num_str);
 
     print_fnd(num_str);
-    LOG_INFO("counter:: print %s", num_str);
     return 1;
 }
 
@@ -109,7 +111,7 @@ int inc_num_digit(int num, number_system ns, int digit) {
     num += tmp;
     num %= ns.upper_boundary;
 
-    LOG_INFO("counter:: increment number_system[%d], digit[%d]:: result: [%d]", ns.number, digit, num);
+    LOG_INFO("COUNTER:: increment number_system[%d], digit[%d]:: result: [%d]", ns.number, digit, num);
 
     return num;
 }
@@ -118,7 +120,7 @@ int start_num_system() {
     cnt %= NS[idx_ns].upper_boundary;
     light_led(NS[idx_ns].light);
 
-    LOG_INFO("counter:: start [%d] number system", NS[idx_ns].number);
+    LOG_INFO("COUNTER:: start [%d] number system", NS[idx_ns].number);
 
     return 1;
 }
