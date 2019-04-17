@@ -12,7 +12,7 @@
 
 #include "../../devices/led/light.h"
 
-#define ONE_SEC 1000
+#define ONE_SEC 1
 
 // device interface
 static int draw_time(int h, int m);
@@ -39,7 +39,8 @@ static int prev_led = LED_4;
 
 
 int switch_mode () {
-    LOG_INFO("clock:: change mode");
+    LOG_INFO("clock:: start to change mode");
+    timer_cancel();
     if(CLOCK_MODE == CLOCK_BASE_MODE) start_change_mode();
     else if (CLOCK_MODE == CLOCK_CHANGE_MODE) save_change_mode();
 }
@@ -50,10 +51,9 @@ void start_base_mode() {
     LOG_INFO("clock:: start base mode");
     CLOCK_MODE = CLOCK_BASE_MODE;
 
-    minutes--;
-
     light_led(LED_1);
-    run_clock(0);
+    draw_time(hour, minutes);
+    timer_start(run_clock, ONE_SEC);
 }
 
 int clock_init () {
@@ -106,8 +106,6 @@ void light_in_turn (int signo) {
     if (CLOCK_MODE != CLOCK_CHANGE_MODE) return;
     prev_led = prev_led == LED_3 ? LED_4 : LED_3;
     light_led(prev_led);
-
-    start_timer(light_in_turn, ONE_SEC);
 }
 
 /**
@@ -177,8 +175,11 @@ int start_change_mode () {
     CLOCK_MODE = CLOCK_CHANGE_MODE;
 
     light_in_turn(0);
+    timer_start(light_in_turn, ONE_SEC);
+
     reset_clock_change();
     draw_time(tmp_hour, tmp_minutes);
+
     LOG_INFO("CLOCK:: Success to start change mode");
     return 1;
 }
@@ -200,7 +201,5 @@ void run_clock(int signo) {
     LOG_INFO("clock:: run clock [%02d:%02d]", hour, minutes);
     inc_minutes(&hour, &minutes);
     draw_time(hour, minutes);
-
-    start_timer(run_clock, ONE_SEC);
 }
 
