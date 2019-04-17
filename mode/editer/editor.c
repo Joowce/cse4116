@@ -68,7 +68,11 @@ int print_text() {
 }
 
 char get_char(int sw) {
-    if (sw == SW12) return ' ';
+    if (sw == SW12) {
+        prev_count = 0;
+        prev_btn = -1;
+        return ' ';
+    }
     if (MODE == EDITOR_NUM) return sw + '1';
 
     if (sw == prev_btn) {
