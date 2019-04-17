@@ -10,6 +10,7 @@
 #include "../../controllers/input/receiver/receiver.h"
 
 #include "../../devices/led/light.h"
+#include "../../devices/fnd/fnd_itf.h"
 
 #define NUM_NS  4
 #define DIGIT   3
@@ -89,7 +90,7 @@ void convert_num_str (number_system ns, int num, unsigned char* num_str) {
     int i;
     int q = num;
     char temp[DIGIT];
-    for (i = DIGIT - 1; i >= 0; i--) {
+    for (i = FND_MAX_DIGIT - 1; i >= FND_MAX_DIGIT - DIGIT; i--) {
         num_str[i] = (unsigned char)((q % ns.number));
         temp[i] = num_str[i] + '0';
         q = q / ns.number;
@@ -98,7 +99,7 @@ void convert_num_str (number_system ns, int num, unsigned char* num_str) {
 }
 
 int draw_number () {
-    unsigned char num_str[DIGIT] = {0,};
+    unsigned char num_str[FND_MAX_DIGIT] = {0,};
     convert_num_str(NS[idx_ns], cnt, num_str);
 
     print_fnd(num_str);
