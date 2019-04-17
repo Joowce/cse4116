@@ -200,7 +200,7 @@ int reset_dot(int r, int c) {
 }
 
 int change_dot(int r, int c) {
-    if (get_board_status(r, c) == BOARD_ERROR) fill_dot(r, c);
+    if (get_board_status(r, c) == DOT_EMPTY) fill_dot(r, c);
     else reset_dot(r, c);
     return BOARD_SUCCESS;
 }
