@@ -12,7 +12,7 @@
 
 #define FPGA_DOT_DEVICE "/dev/fpga_dot"
 
-static int print_dot (const unsigned char* data)
+static int print_dot (const unsigned char* data);
 
 const callback DOT_CALLBACK[NUM_CALLBACK_DOT] = {cb_print_dot, cb_print_dot_num};
 static int dev = -1;
