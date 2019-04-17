@@ -5,6 +5,7 @@
 #ifndef EMBEDED_BOARD_H
 #define EMBEDED_BOARD_H
 
-
+int board_init();
+int board_exit();
 
 #endif //EMBEDED_BOARD_H
