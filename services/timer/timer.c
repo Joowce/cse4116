@@ -14,7 +14,7 @@ struct itimerval set_time_val;
 
 void timer_start (void(*func)(int), long nsec_interval) {
 
-    sigset(SIGALRM, func);
+    signal(SIGALRM, func);
 
     set_time_val.it_value.tv_sec = nsec_interval;
     set_time_val.it_value.tv_usec = 0;
