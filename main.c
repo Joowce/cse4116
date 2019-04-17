@@ -31,11 +31,6 @@ void kill_process (pid_t pid) {
 
 int stop_main_state () {
     MAIN_STATE = STOP;
-    kill_process(p_input);
-    LOG_INFO("main:: kill input process");
-
-    kill_process(p_output);
-    LOG_INFO("main::kill output process");
     return 1;
 }
 
@@ -114,12 +109,17 @@ int main() {
         usleep(300);
     }
 
+    main_exit();
+
+    kill_process(p_input);
+    LOG_INFO("main:: kill input process");
+
+    kill_process(p_output);
+    LOG_INFO("main::kill output process");
+
     wait(&status);
     LOG_INFO("main:: end wait status: [%d]", status);
 
-    stop_main_state();
-
-    main_exit();
     return 0;
 }
 

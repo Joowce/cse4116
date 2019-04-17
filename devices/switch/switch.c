@@ -53,7 +53,7 @@ unsigned int get_sw_mask (int num) {
 
 int get_switch_mask (const unsigned char* switch_buttons) {
     int i;
-    int temp = 0;
+    int mask = 0;
     if (status_mask[0] == 0) {
         for(i = 0; i < NUM_BUTTON; i++) {
             status_mask[i] = get_sw_mask(i);
@@ -65,10 +65,10 @@ int get_switch_mask (const unsigned char* switch_buttons) {
 
     for (i = 0; i < NUM_BUTTON; i++) {
         if (switch_buttons[i] == PRESSED) {
-            temp |= status_mask[i];
+            mask |= status_mask[i];
         }
     }
-    return temp;
+    return mask;
 }
 
 int convert_switch_num(int mask) {
@@ -93,7 +93,7 @@ int get_pressed_switch () {
         return SWITCH_ERROR;
     }
 
-    if ((cur_status_mask | prev_mask) != 0) return SWITCH_ERROR;
+    if ((cur_status_mask & prev_mask) > 0) return SWITCH_ERROR;
 
     switch_num = convert_switch_num(prev_mask);
     prev_mask = cur_status_mask;
