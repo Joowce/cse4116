@@ -16,7 +16,7 @@
 #include "../../../devices/dot/dot_itf.h"
 
 #include "../../../devices/led/light.h"
-#include "../../../devices/dot/font.h"
+#include "../../../devices/dot/font/font.h"
 
 
 /**

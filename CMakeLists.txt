@@ -18,7 +18,7 @@ set(TIMER ${SERVICES}/timer/timer.c ${SERVICES}/timer/timer.h)
 # controller 관련 변수 설정
 set(CTRL controllers)
 set(CTRL_OUTPUT_DEV ${CTRL}/device/device.c ${CTRL}/device/device.h ${CTRL}/device/itf.h)
-set(CTRL_DEV_CLIENT ${CTRL}/device/itf.h ${CTRL}/device/client/device_client.c ${CTRL}/device/client/device_client.h)
+set(CTRL_DEV_CLIENT ${CTRL}/device/itf.h ${CTRL}/device/client/device_client.c ${CTRL}/device/client/device_client.h devices/dot/font/font.c)
 set(CTRL_INPUT_SENDER ${CTRL}/input/sender/sender.c ${CTRL}/input/sender/sender.h)
 set(CTRL_INPUT_RECEIVER ${CTRL}/input/input_itf.h ${CTRL}/input/receiver/receiver.c ${CTRL}/input/receiver/receiver.h)
 set(CTRL_MODE ${CTRL}/mode/mode.c ${CTRL}/mode/mode.h)
@@ -27,7 +27,7 @@ set(CTRL_MODE ${CTRL}/mode/mode.c ${CTRL}/mode/mode.h)
 set(DEVICES devices)
 
 set(DEVICE_DOT_DIR ${DEVICES}/dot)
-set(DEVICE_DOT ${DEVICE_DOT_DIR}/font.h ${DEVICE_DOT_DIR}/dot.h ${DEVICE_DOT_DIR}/dot.c ${DEVICE_DOT_DIR}/dot_itf.h)
+set(DEVICE_DOT ${DEVICE_DOT_DIR}/font/font.h ${DEVICE_DOT_DIR}/dot.h ${DEVICE_DOT_DIR}/dot.c ${DEVICE_DOT_DIR}/dot_itf.h devices/dot/font/font.c)
 
 set(DEVICE_LED_DIR ${DEVICES}/led)
 set(DEVICE_LED  ${DEVICE_LED_DIR}/led.c ${DEVICE_LED_DIR}/led.h ${DEVICE_LED_DIR}/led_itf.h ${DEVICE_LED_DIR}/light.h)
@@ -51,7 +51,7 @@ set(INPUT_DEVICES ${DEVICE_SW} ${DEVICE_RK})
 # mode 관련 변수 설정
 set(MODE_DIR mode)
 
-set(MODE_CLOCK ${MODE_DIR}/clock/clock.c ${MODE_DIR}/clock/clock.h)
+set(MODE_CLOCK ${MODE_DIR}/clock/clock.c ${MODE_DIR}/clock/clock.h devices/dot/font/font.c)
 
 set(MODES ${MODE_CLOCK} mode/counter/counter.c mode/counter/counter.h mode/editer/editor.c mode/editer/editor.h)
 

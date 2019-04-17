@@ -11,7 +11,7 @@
 
 #include "../../devices/lcd/lcd_itf.h"
 #include "../../devices/switch/switch_itf.h"
-#include "../../devices/dot/font.h"
+#include "../../devices/dot/font/font.h"
 #include "../../devices/fnd/fnd_itf.h"
 
 

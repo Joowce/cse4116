@@ -1,9 +1,8 @@
 //
-// Created by 민지우 on 2019-04-10.
+// Created by 민지우 on 2019-04-17.
 //
 
-#ifndef EMBEDED_FONT_H
-#define EMBEDED_FONT_H
+#include "font.h"
 
 unsigned char dot_number[10][10] = {
         {0x3e,0x7f,0x63,0x73,0x73,0x6f,0x67,0x63,0x7f,0x3e}, // 0
@@ -29,5 +28,3 @@ unsigned char dot_set_blank[10] = {
 };
 
 unsigned char dot_alpha_a[10] = {0x1c,0x36,0x63,0x63,0x63,0x7f,0x7f,0x63,0x63,0x63};
-
-#endif //EMBEDED_FONT_H
