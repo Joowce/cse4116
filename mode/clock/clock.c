@@ -13,6 +13,7 @@
 #include "../../devices/led/light.h"
 
 #define ONE_SEC 1
+#define ONE_MIN 60
 
 // device interface
 static int draw_time(int h, int m);
@@ -53,7 +54,7 @@ void start_base_mode() {
 
     light_led(LED_1);
     draw_time(hour, minutes);
-    timer_start(run_clock, ONE_SEC);
+    timer_start(run_clock, ONE_MIN);
 }
 
 int clock_init () {
