@@ -76,27 +76,29 @@ char get_char(int sw) {
         prev_count %= CNT_BUTTON_MODE;
     } else {
         prev_count = 0;
-        prev_btn = -1;
+        prev_btn = sw;
     }
     return map_alpha[sw][prev_count];
 }
 
-int inc_cnt () {
+int print_cnt () {
     unsigned char tmp[FND_MAX_DIGIT];
     int r;
     int q = 1;
     int i = 0;
-    total_count++;
-    total_count %= MAX_CNT;
-
     for (i = 0; i < FND_MAX_DIGIT - 1; i++, q *= 10);
 
     for (i = 0, r = total_count; i < FND_MAX_DIGIT; i++) {
         tmp[i] = r / q;
         r %= q;
     }
-
     return print_fnd(tmp);
+}
+
+int inc_cnt () {
+    total_count++;
+    total_count %= MAX_CNT;
+    return print_cnt();
 }
 
 int edit_text (int sw) {
@@ -107,7 +109,7 @@ int edit_text (int sw) {
     if (sw == prev_btn) text[len - 1] = '\0';
 
     if (len == LCD_MAX_BUFF) {
-        strncpy((char *)temp, (char *)(text + 1), len - 1);
+        strncpy((char *)temp, (char *)(&text[1]), len - 1);
         strncpy((char*)text, (char*)temp, len - 1);
     }
 
@@ -121,9 +123,10 @@ int edit_text (int sw) {
 }
 
 int reset_text () {
-    text[0] = '\0';
+    memset(text, 0, LCD_MAX_BUFF + 1);
+
     total_count = 0;
-    print_fnd(&total_count);
+    print_cnt();
 
     LOG_INFO("EDITOR:: Success to reset text");
 
