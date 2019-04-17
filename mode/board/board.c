@@ -53,6 +53,7 @@ void blink (int signo) {
 int fill_cur_val () {
     inc_cnt();
     fill_dot(cur_r, cur_c);
+    cur_val = DOT_FILL;
     return print_board();
 }
 
