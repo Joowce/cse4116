@@ -162,7 +162,7 @@ int editor_init() {
     add_sw_handler(SW10, reset_text);
     add_sw_handler(SW11, change_editor_mode);
     add_sw_handler(SW12, edit_text10);
-
+    init_cnt();
     LOG_INFO("EDITOR:: Success to init");
     return EDITOR_SUCESS;
 }
