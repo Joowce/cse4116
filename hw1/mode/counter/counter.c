@@ -108,7 +108,8 @@ int draw_number () {
 
 int inc_num_digit(int num, number_system ns, int digit) {
     int tmp = 1;
-    for (int i = 0; i < digit; i++, tmp *= ns.number);
+    int i = 0;
+    for (i = 0; i < digit; i++, tmp *= ns.number);
     num += tmp;
     num %= ns.upper_boundary;
 

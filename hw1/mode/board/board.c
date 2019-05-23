@@ -94,9 +94,10 @@ int change_cur_status() {
 
 int reverse_board() {
     unsigned char mask = 1 << MAX_COL;
+    int i;
     mask--;
     cur_val = cur_val == BOARD_SUCCESS ? BOARD_ERROR : BOARD_SUCCESS;
-    for (int i = 0; i < MAX_ROW; i++) {
+    for (i = 0; i < MAX_ROW; i++) {
         board[i] = ~board[i];
         board[i] &= mask;
     }
