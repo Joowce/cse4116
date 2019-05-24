@@ -14,10 +14,10 @@
 #include <linux/version.h>
 #include <linux/cdev.h>
 
-static int inter_major=0, inter_minor=0;
-static int result;
-static dev_t inter_dev;
-static struct cdev inter_cdev;
+#define STOPWATCH_MAJOR 242
+#define STOPWATCH_MINOR 0
+#define STOPWATCH_NAME "stopwatch"
+
 static int inter_open(struct inode *, struct file *);
 static int inter_release(struct inode *, struct file *);
 static int inter_write(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
@@ -106,47 +106,22 @@ static int inter_write(struct file *filp, const char *buf, size_t count, loff_t 
 	return 0;
 }
 
-static int inter_register_cdev(void)
-{
-	int error;
-	if(inter_major) {
-		inter_dev = MKDEV(inter_major, inter_minor);
-		error = register_chrdev_region(inter_dev,1,"inter");
-	}else{
-		error = alloc_chrdev_region(&inter_dev,inter_minor,1,"inter");
-		inter_major = MAJOR(inter_dev);
-	}
-	if(error<0) {
-		printk(KERN_WARNING "inter: can't get major %d\n", inter_major);
-		return result;
-	}
-	printk(KERN_ALERT "major number = %d\n", inter_major);
-	cdev_init(&inter_cdev, &inter_fops);
-	inter_cdev.owner = THIS_MODULE;
-	inter_cdev.ops = &inter_fops;
-	error = cdev_add(&inter_cdev, inter_dev, 1);
-	if(error)
-	{
-		printk(KERN_NOTICE "inter Register Error %d\n", error);
-	}
-	return 0;
-}
-
 static int __init inter_init(void) {
 	int result;
-	if((result = inter_register_cdev()) < 0 )
+	if((result = register_chrdev(STOPWATCH_MAJOR, STOPWATCH_NAME, &inter_fops)) < 0 )
 		return result;
 	printk(KERN_ALERT "Init Module Success \n");
-	printk(KERN_ALERT "Device : /dev/inter, Major Num : 246 \n");
+	printk(KERN_ALERT "Device : /dev/%s, Major Num : %d \n", STOPWATCH_NAME, STOPWATCH_MAJOR);
 	return 0;
 }
 
 static void __exit inter_exit(void) {
-	cdev_del(&inter_cdev);
-	unregister_chrdev_region(inter_dev, 1);
+	unregister_chrdev(STOPWATCH_MAJOR, STOPWATCH_NAME);
 	printk(KERN_ALERT "Remove Module Success \n");
 }
 
 module_init(inter_init);
 module_exit(inter_exit);
-	MODULE_LICENSE("GPL");
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR ("author");
