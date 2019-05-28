@@ -83,3 +83,7 @@ void start_stopwatch (void(*blink_handler)(unsigned long)) {
 
     if (rest != NO_LAP) stopwatch.rest = NO_LAP;
 }
+
+TimerStatus get_stopwatch_status () {
+    return stopwatch.rest == NO_LAP ? TIMER_RUNNING : TIMER_PAUSE;
+}
