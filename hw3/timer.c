@@ -44,20 +44,23 @@ static void set_timeout (long clocks, void (*func) (unsigned long)) {
 static void stopwatch_blink (unsigned long timeout) {
     struct Stopwatch *p_watch = (struct Stopwatch*) timeout;
 
-    unsigned long time = get_jiffies_64() - p_watch -> start;
-    p_watch->blink_handler(time);
+    unsigned long sec = (get_jiffies_64() - p_watch -> start) / HZ;
+    p_watch->blink_handler(sec);
 
     set_timeout(HZ, stopwatch_blink);
 }
 
 /**
  * initialize stopwatch data
+ * timer initialized
  * @param after_handler : called after initialization
  */
 void stopwatch_init (void(*after_handler)(unsigned long)) {
+    stopwatch.status = TIMER_PAUSE;
     stopwatch.start = get_jiffies_64();
     stopwatch.rest = NO_LAP;
 
+    init_timer(&(stopwatch.timer));
     after_handler(0);
 }
 
@@ -80,11 +83,26 @@ void stopwatch_start (void(*blink_handler)(unsigned long)) {
     unsigned long rest = stopwatch.rest;
 
     if(blink_handler != NULL) stopwatch.blink_handler = blink_handler;
+    if (rest == NO_LAP) stopwatch.start = get_jiffies_64();
     stopwatch.status = TIMER_RUNNING;
     set_timeout(rest == NO_LAP ? HZ : stopwatch.rest, stopwatch_blink);
 
     if (rest != NO_LAP) stopwatch.rest = NO_LAP;
 }
+
+/**
+ * pause stopwatch
+ * reset stopwatch data
+ * @param after_handler : called after reset
+ */
+void stopwatch_reset (void(*after_handler)(unsigned long)) {
+    stopwatch_pause();
+    stopwatch.start = get_jiffies_64();
+    stopwatch.rest = NO_LAP;
+
+    after_handler(0);
+}
+
 
 /**
  * get timer status
