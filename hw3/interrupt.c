@@ -66,6 +66,7 @@ irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg)
             vol_down_pressed_start_time = get_jiffies_64();
         } else if (get_jiffies_64() - vol_down_pressed_start_time >= 3 * HZ) {
             stopwatch_ctrl_exit();
+            vol_down_pressed_start_time = NULL;
             wake_up_interruptible(wait_queue);
         }
 
