@@ -1,4 +1,4 @@
-obj-m := interrupt.o
+obj-m := interrupt.o device.o timer.o stopwatch_controller.o
 
 KDIR := /work/achroimx_kernel/
 PWD := $(shell pwd)
