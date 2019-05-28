@@ -3,14 +3,14 @@ CFLAGS=-static -Wall
 
 MAIN_OBJS = main.o
 
-all: main
+all: app
 
-main: $(MAIN_OBJS)
+app: $(MAIN_OBJS)
 	$(CC) $(CFLAGS) -o $@ $(MAIN_OBJS)
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(MAIN_OBJS) $(INPUT_OBJS) $(OUTPUT_OBJS) main input output
+	rm -f $(MAIN_OBJS) app
 
