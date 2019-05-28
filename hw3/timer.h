@@ -7,9 +7,9 @@
 
 typedef enum _TimerStatus {TIMER_PAUSE, TIMER_RUNNING} TimerStatus;
 
-void init_stopwatch (void(*after_handler)(unsigned long));
+void stopwatch_init (void(*after_handler)(unsigned long));
 void stopwatch_pause ();
-void start_stopwatch (void(*blink_handler)(unsigned long));
-TimerStatus get_stopwatch_status ()
+void stopwatch_start (void(*blink_handler)(unsigned long));
+TimerStatus stopwatch_get_status ()
 
 #endif //EMBEDED_TIMER_H

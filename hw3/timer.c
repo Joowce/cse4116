@@ -18,6 +18,7 @@ static struct Stopwatch {
     struct timer_list timer;
     unsigned long start;
     unsigned long rest;
+    TimerStatus status;
     void (*blink_handler) (unsigned long);
 };
 
@@ -53,13 +54,11 @@ static void stopwatch_blink (unsigned long timeout) {
  * initialize stopwatch data
  * @param after_handler : called after initialization
  */
-void init_stopwatch (void(*after_handler)(unsigned long)) {
-
+void stopwatch_init (void(*after_handler)(unsigned long)) {
     stopwatch.start = get_jiffies_64();
-    stopwatch.blink_handler = blink_handler;
     stopwatch.rest = NO_LAP;
 
-    after_handler(get_jiffies_64() - stopwatch.start);
+    after_handler(0);
 }
 
 /**
@@ -68,6 +67,7 @@ void init_stopwatch (void(*after_handler)(unsigned long)) {
  */
 void stopwatch_pause () {
     stopwatch.rest = stopwatch.timer.expires - get_jiffies_64();
+    stopwatch.status = TIMER_PAUSE;
     del_timer_sync(&(stopwatch.timer));
 }
 
@@ -76,14 +76,20 @@ void stopwatch_pause () {
  * if lap is existed, set expires to rest
  * @param blink_handler : executed when blink
  */
-void start_stopwatch (void(*blink_handler)(unsigned long)) {
+void stopwatch_start (void(*blink_handler)(unsigned long)) {
     unsigned long rest = stopwatch.rest;
 
-    set_timeout(rest == NO_LAP ? HZ : stopwatch.rest, blink_handler);
+    if(blink_handler != NULL) stopwatch.blink_handler = blink_handler;
+    stopwatch.status = TIMER_RUNNING;
+    set_timeout(rest == NO_LAP ? HZ : stopwatch.rest, stopwatch_blink);
 
     if (rest != NO_LAP) stopwatch.rest = NO_LAP;
 }
 
-TimerStatus get_stopwatch_status () {
+/**
+ * get timer status
+ * @return TimerStatus: timer status
+ */
+TimerStatus stopwatch_get_status () {
     return stopwatch.rest == NO_LAP ? TIMER_RUNNING : TIMER_PAUSE;
 }
