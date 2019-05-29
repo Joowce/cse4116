@@ -33,7 +33,16 @@ irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg)
 irqreturn_t handler_vol_down_rising(int irq, void* dev_id, struct pt_regs* reg);
 
 static unsigned long vol_down_pressed_start_time = -1;
+/**
+ * for vol- button
+ * save start time for pressing
+ * check user pressing during 3 sec
+ */
+static unsigned long vol_down_pressed_start_time = NULL;
 
+/**
+ * module's file operations
+ */
 static struct file_operations inter_fops =
 {
 	.open = inter_open,
@@ -41,24 +50,57 @@ static struct file_operations inter_fops =
 	.release = inter_release,
 };
 
+/**
+ * home button handler
+ * stopwatch start
+ * @param irq
+ * @param dev_id
+ * @param reg
+ * @return
+ */
 irqreturn_t handler_home(int irq, void* dev_id, struct pt_regs* reg) {
 	printk(KERN_ALERT "home interrupt\n");
     stopwatch_ctrl_start();
 	return IRQ_HANDLED;
 }
 
+/**
+ * back button handler
+ * stopwatch pause
+ * @param irq
+ * @param dev_id
+ * @param reg
+ * @return
+ */
 irqreturn_t handler_back(int irq, void* dev_id, struct pt_regs* reg) {
         printk(KERN_ALERT "back interrupt\n");
         stopwatch_ctrl_pause();
         return IRQ_HANDLED;
 }
 
+/**
+ * vol+ handler
+ * stopwatch reset
+ * @param irq
+ * @param dev_id
+ * @param reg
+ * @return
+ */
 irqreturn_t handler_vol_up(int irq, void* dev_id,struct pt_regs* reg) {
         printk(KERN_ALERT "vol up interrupt\n");
         stopwatch_ctrl_reset();
         return IRQ_HANDLED;
 }
 
+/**
+ * vol- falling handler
+ * if start_time is -1, set start_time
+ * if handler called after 3 seconds, then stopwatch exit and wake_up wait_queue
+ * @param irq
+ * @param dev_id
+ * @param reg
+ * @return
+ */
 irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg) {
         printk(KERN_ALERT "vol down interrupt\n");
 
@@ -73,6 +115,14 @@ irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg)
         return IRQ_HANDLED;
 }
 
+/**
+ * vol- rising handler
+ * unset start_time
+ * @param irq
+ * @param dev_id
+ * @param reg
+ * @return
+ */
 irqreturn_t handler_vol_down_rising (int irq, void* dev_id, struct pt_regs* reg) {
         printk(KERN_ALERT "vol down interrupt\n");
         vol_down_pressed_start_time = -1;
@@ -80,6 +130,15 @@ irqreturn_t handler_vol_down_rising (int irq, void* dev_id, struct pt_regs* reg)
 }
 
 
+/**
+ * interrupt open
+ * connected with fops.open
+ * register interrupt handlers
+ * unset start time
+ * @param minode
+ * @param mfile
+ * @return
+ */
 static int inter_open(struct inode *minode, struct file *mfile){
 	irqreturn_t ret;
 	int irq;
@@ -113,6 +172,15 @@ static int inter_open(struct inode *minode, struct file *mfile){
 	return 0;
 }
 
+/**
+ * interrupt release
+ * connected with fops.release
+ * free interrupt handler
+ * unset start time
+ * @param minode
+ * @param mfile
+ * @return
+ */
 static int inter_release(struct inode *minode, struct file *mfile){
 	free_irq(gpio_to_irq(IMX_GPIO_NR(1, 11)), NULL);
 	free_irq(gpio_to_irq(IMX_GPIO_NR(1, 12)), NULL);
@@ -124,12 +192,26 @@ static int inter_release(struct inode *minode, struct file *mfile){
 	return 0;
 }
 
+/**
+ * interrupt write
+ * connected with fops.write
+ * @param filp
+ * @param buf
+ * @param count
+ * @param f_pos
+ * @return
+ */
 static int inter_write(struct file *filp, const char *buf, size_t count, loff_t *f_pos ){
 	interruptible_sleep_on(&wait_queue);
 	printk("write\n");
 	return 0;
 }
 
+/**
+ * inter initialize
+ * for module initialize
+ * register inter_fops
+ */
 static int __init inter_init(void) {
 	int result;
 	if((result = register_chrdev(STOPWATCH_MAJOR, STOPWATCH_NAME, &inter_fops)) < 0 )
@@ -139,6 +221,11 @@ static int __init inter_init(void) {
 	return 0;
 }
 
+/**
+ * inter exit
+ * for module exit
+ * unregister this module
+ */
 static void __exit inter_exit(void) {
 	unregister_chrdev(STOPWATCH_MAJOR, STOPWATCH_NAME);
 	printk(KERN_ALERT "Remove Module Success \n");
