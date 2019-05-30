@@ -6,7 +6,7 @@
 #include <asm/div64.h>
 #include "timer.h"
 
-#define NO_LAP -1
+#define NO_LAP 0
 
 /**
  * stopwatch structure
@@ -17,8 +17,8 @@
  */
 struct Stopwatch {
     struct timer_list timer;
-    unsigned long start;
-    unsigned long rest;
+    unsigned long duration;
+    unsigned long rest_clocks;
     TimerStatus status;
     void (*blink_handler) (unsigned long);
 };
@@ -44,12 +44,11 @@ static void set_timeout (long clocks, void (*func) (unsigned long)) {
 static void stopwatch_blink (unsigned long timeout) {
     struct Stopwatch *p_watch = (struct Stopwatch*) timeout;
 
-    unsigned long diff = get_jiffies_64() - (p_watch -> start);
-    unsigned long sec = do_div(diff, HZ);
-    p_watch->blink_handler(sec);
+    unsigned long duration = p_watch -> duration = p_watch -> duration + 1;
+    p_watch->blink_handler(duration);
 
     set_timeout(HZ, stopwatch_blink);
-    printk(KERN_INFO "[stopwatch blink] sec: %ld", sec);
+    printk(KERN_INFO "[stopwatch blink] sec: %ld", duration);
 }
 
 /**
@@ -58,9 +57,9 @@ static void stopwatch_blink (unsigned long timeout) {
  * @param after_handler : called after initialization
  */
 void stopwatch_init (void(*after_handler)(unsigned long)) {
-    stopwatch.status = TIMER_PAUSE;
+    stopwatch.status = TIMER_INIT;
     stopwatch.start = get_jiffies_64();
-    stopwatch.rest = NO_LAP;
+    stopwatch.rest_clocks = NO_LAP;
 
     init_timer(&(stopwatch.timer));
     after_handler(0);
@@ -78,31 +77,27 @@ void stopwatch_pause () {
 
 /**
  * start stopwatch
- * if lap is existed, set expires to rest
+ * if previous status is pause, set expires to rest clocks
  * @param blink_handler : executed when blink
  */
 void stopwatch_start (void(*blink_handler)(unsigned long)) {
-    unsigned long rest = stopwatch.rest;
+    unsigned long prev_status = stopwatch.status;
 
     if(blink_handler != NULL) stopwatch.blink_handler = blink_handler;
-    if (rest == NO_LAP) stopwatch.start = get_jiffies_64();
     stopwatch.status = TIMER_RUNNING;
-    set_timeout(rest == NO_LAP ? HZ : stopwatch.rest, stopwatch_blink);
+    set_timeout(prev_status == TIMER_PAUSE ? stopwatch.rest_clocks : HZ, stopwatch_blink);
 
-    if (rest != NO_LAP) stopwatch.rest = NO_LAP;
+    if (prev_status == TIMER_PAUSE) stopwatch.rest_clocks = NO_LAP;
 }
 
 /**
  * pause stopwatch
- * reset stopwatch data
+ * initialize stopwatch data
  * @param after_handler : called after reset
  */
 void stopwatch_reset (void(*after_handler)(unsigned long)) {
     stopwatch_pause();
-    stopwatch.start = get_jiffies_64();
-    stopwatch.rest = NO_LAP;
-
-    after_handler(0);
+    stopwatch_init(after_handler);
 }
 
 

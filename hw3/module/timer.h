@@ -5,7 +5,7 @@
 #ifndef EMBEDED_TIMER_H
 #define EMBEDED_TIMER_H
 
-typedef enum _TimerStatus {TIMER_PAUSE, TIMER_RUNNING} TimerStatus;
+typedef enum _TimerStatus {TIMER_INIT, TIMER_PAUSE, TIMER_RUNNING} TimerStatus;
 
 void stopwatch_init (void(*after_handler)(unsigned long));
 void stopwatch_reset (void(*after_handler)(unsigned long));

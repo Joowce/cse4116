@@ -15,7 +15,7 @@ static void write_duration (unsigned long);
  * if timer is running, then pass
  */
 void stopwatch_ctrl_start() {
-    if(stopwatch_get_status() == TIMER_RUNNING) return;
+    if(stopwatch_get_status() != TIMER_INIT) return;
 
     stopwatch_start(write_duration);
     printk(KERN_INFO "[stopwatch ctrl start] start\n");
@@ -27,13 +27,18 @@ void stopwatch_ctrl_start() {
  * if stopwatch is paused, then running
  */
 void stopwatch_ctrl_pause() {
-    if (stopwatch_get_status() == TIMER_RUNNING) {
-        stopwatch_pause();
-        printk(KERN_INFO "[stopwatch ctrl pause] pause\n");
-    }
-    else {
-        stopwatch_start(write_duration);
-        printk(KERN_INFO "[stopwatch ctrl pause] start\n");
+    switch (stopwatch_get_status()) {
+        case TIMER_RUNNING:
+            stopwatch_pause();
+            printk(KERN_INFO
+            "[stopwatch ctrl pause] pause\n");
+            break;
+        case TIMER_PAUSE:
+            stopwatch_start(write_duration);
+            printk(KERN_INFO
+            "[stopwatch ctrl pause] start\n");
+            break;
+        default: break;
     }
 }
 
@@ -43,10 +48,10 @@ void stopwatch_ctrl_pause() {
  * if stopwatch was running, start stopwatch
  */
 void stopwatch_ctrl_reset() {
-    TimerStatus status = stopwatch_get_status();
+    TimerStatus prev_status = stopwatch_get_status();
     stopwatch_reset(write_duration);
     
-    if (status == TIMER_RUNNING) {
+    if (prev_status == TIMER_RUNNING) {
         stopwatch_start(write_duration);
         printk(KERN_INFO "[stopwatch ctrl reset] reset running\n");
     } else printk(KERN_INFO "[stopwatch ctrl reset] reset only data\n");
