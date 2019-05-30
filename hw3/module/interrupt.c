@@ -218,6 +218,7 @@ static int __init inter_init(void) {
 		return result;
 	printk(KERN_ALERT "Init Module Success \n");
 	printk(KERN_ALERT "Device : /dev/%s, Major Num : %d \n", STOPWATCH_NAME, STOPWATCH_MAJOR);
+	init_timer(&vol_down_timer);
 	return 0;
 }
 
