@@ -1,4 +1,7 @@
-obj-m := interrupt.o device.o timer.o stopwatch_controller.o
+mod-name = stopwatch
+
+obj-m := ${mod-name}.o
+${mod-name}-y := interrupt.o device.o timer.o stopwatch_controller.o
 
 KDIR := /work/achroimx_kernel/
 PWD := $(shell pwd)

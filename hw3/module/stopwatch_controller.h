@@ -5,10 +5,10 @@
 #ifndef EMBEDED_STOPWATCH_CONTROLLER_H
 #define EMBEDED_STOPWATCH_CONTROLLER_H
 
-void stopwatch_ctrl_init();
-void stopwatch_ctrl_start();
-void stopwatch_ctrl_reset();
-void stopwatch_ctrl_exit();
-void stopwatch_ctrl_pause();
+void stopwatch_ctrl_init(void);
+void stopwatch_ctrl_start(void);
+void stopwatch_ctrl_reset(void);
+void stopwatch_ctrl_exit(void);
+void stopwatch_ctrl_pause(void);
 
 #endif //EMBEDED_STOPWATCH_CONTROLLER_H

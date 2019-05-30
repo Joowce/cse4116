@@ -3,6 +3,7 @@
 //
 
 #include <linux/timer.h>
+#include <asm/div64.h>
 #include "timer.h"
 
 #define NO_LAP -1
@@ -14,7 +15,7 @@
  * rest: store rest of expires, when stopwatch stop
  * blink_handler: handler that is called when stopwatch blink
  */
-static struct Stopwatch {
+struct Stopwatch {
     struct timer_list timer;
     unsigned long start;
     unsigned long rest;
@@ -22,8 +23,7 @@ static struct Stopwatch {
     void (*blink_handler) (unsigned long);
 };
 
-struct Stopwatch stopwatch;
-
+static struct Stopwatch stopwatch;
 /**
  * set timer after clocks, and set func
  * @param clocks : duration clocks
@@ -44,7 +44,8 @@ static void set_timeout (long clocks, void (*func) (unsigned long)) {
 static void stopwatch_blink (unsigned long timeout) {
     struct Stopwatch *p_watch = (struct Stopwatch*) timeout;
 
-    unsigned long sec = (get_jiffies_64() - p_watch -> start) / HZ;
+    unsigned long diff = get_jiffies_64() - p_watch -> start;
+    unsigned long sec = do_div(diff, HZ);
     p_watch->blink_handler(sec);
 
     set_timeout(HZ, stopwatch_blink);
