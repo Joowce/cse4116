@@ -31,8 +31,7 @@ static int inter_write(struct file *filp, const char *buf, size_t count, loff_t 
 irqreturn_t handler_home(int irq, void* dev_id, struct pt_regs* reg);
 irqreturn_t handler_back(int irq, void* dev_id, struct pt_regs* reg);
 irqreturn_t handler_vol_up(int irq, void* dev_id, struct pt_regs* reg);
-irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg);
-irqreturn_t handler_vol_down_rising(int irq, void* dev_id, struct pt_regs* reg);
+irqreturn_t handler_vol_down(int irq, void* dev_id, struct pt_regs* reg);
 
 /**
  * for vol- button
@@ -93,41 +92,25 @@ irqreturn_t handler_vol_up(int irq, void* dev_id,struct pt_regs* reg) {
 }
 
 /**
- * vol- falling handler
- * if start_time is -1, set start_time
- * if handler called after 3 seconds, then stopwatch exit and wake_up wait_queue
+ * vol- handler
+ * delete timer
+ * if timer expires is before jiffies, set timer
  * @param irq
  * @param dev_id
  * @param reg
  * @return
  */
-irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg) {
-        printk(KERN_ALERT "vol down falling interrupt\n");
-
+irqreturn_t handler_vol_down(int irq, void* dev_id, struct pt_regs* reg) {
+        printk(KERN_ALERT "vol down interrupt\n");
+        del_timer(&vol_down_timer);
         if (time_is_before_jiffies(vol_down_timer.expires)) {
-            del_timer(&vol_down_timer);
-            vol_down_timer.expires = jiffies + 3 * HZ;
+            vol_down_timer.expires = get_jiffies_64() + 3 * HZ;
             add_timer(&vol_down_timer);
             printk(KERN_ALERT "start vol- timer");
         }
 
         return IRQ_HANDLED;
 }
-
-/**
- * vol- rising handler
- * delete timer
- * @param irq
- * @param dev_id
- * @param reg
- * @return
- */
-irqreturn_t handler_vol_down_rising (int irq, void* dev_id, struct pt_regs* reg) {
-    printk(KERN_ALERT "vol down rising interrupt\n");
-    del_timer(&vol_down_timer);
-	return IRQ_HANDLED;
-}
-
 
 /**
  * interrupt open
@@ -164,9 +147,7 @@ static int inter_open(struct inode *minode, struct file *mfile){
 	gpio_direction_input(IMX_GPIO_NR(5,14));
 	irq = gpio_to_irq(IMX_GPIO_NR(5,14));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-    ret=request_irq(irq, (irq_handler_t)handler_vol_down_falling, IRQF_TRIGGER_FALLING, "vol_down_falling", 0);
-    ret=request_irq(irq, (irq_handler_t)handler_vol_down_rising, IRQF_TRIGGER_RISING, "vol_down_rising", 0);
-
+    ret=request_irq(irq, (irq_handler_t)handler_vol_down, IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING, "vol_down", 0);
 
     stopwatch_ctrl_init();
     vol_down_timer.function = inter_end;
@@ -188,6 +169,7 @@ static int inter_release(struct inode *minode, struct file *mfile){
 	free_irq(gpio_to_irq(IMX_GPIO_NR(2, 15)), NULL);
 	free_irq(gpio_to_irq(IMX_GPIO_NR(5, 14)), NULL);
 
+	inter_end();
 	printk(KERN_ALERT "Release Module\n");
 	return 0;
 }
