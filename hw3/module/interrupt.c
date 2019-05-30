@@ -134,6 +134,7 @@ irqreturn_t handler_vol_down_rising (int irq, void* dev_id, struct pt_regs* reg)
  * interrupt open
  * connected with fops.open
  * register interrupt handlers
+ * stopwatch init
  * unset start time
  * @param minode
  * @param mfile
@@ -168,6 +169,7 @@ static int inter_open(struct inode *minode, struct file *mfile){
     ret=request_irq(irq, handler_vol_down_rising, IRQF_TRIGGER_RISING, "vol_down_rising", 0);
 
 
+    stopwatch_ctrl_init();
 	vol_down_pressed_start_time = -1;
 	return 0;
 }
