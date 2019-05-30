@@ -102,8 +102,8 @@ irqreturn_t handler_vol_up(int irq, void* dev_id,struct pt_regs* reg) {
  * @return
  */
 irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg) {
-        printk(KERN_ALERT "vol down falling interrupt\n");
         unsigned long jiffies = get_jiffies_64();
+        printk(KERN_ALERT "vol down falling interrupt\n");
 
         if (vol_down_timer.expires < jiffies){
             vol_down_timer.expires = jiffies + 3 * HZ;
@@ -188,7 +188,6 @@ static int inter_release(struct inode *minode, struct file *mfile){
 	free_irq(gpio_to_irq(IMX_GPIO_NR(2, 15)), NULL);
 	free_irq(gpio_to_irq(IMX_GPIO_NR(5, 14)), NULL);
 
-	vol_down_pressed_start_time = -1;
 	printk(KERN_ALERT "Release Module\n");
 	return 0;
 }
@@ -203,8 +202,8 @@ static int inter_release(struct inode *minode, struct file *mfile){
  * @return
  */
 static int inter_write(struct file *filp, const char *buf, size_t count, loff_t *f_pos ){
+	printk("write \n");
 	interruptible_sleep_on(&wait_queue);
-	printk("write\n");
 	return 0;
 }
 

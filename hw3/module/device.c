@@ -19,8 +19,8 @@ void fnd_write(char *val) {
     unsigned short int fnd_val = 0;
 
     for (i =0; i < FND_DIGIT; i++) {
-        fnd_val |= val[i];
         fnd_val <<= 4;
+        fnd_val |= val[i];
     }
 
     outw(fnd_val, (unsigned int)iom_fpga_fnd_addr);
