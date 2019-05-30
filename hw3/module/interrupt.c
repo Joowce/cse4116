@@ -169,7 +169,7 @@ static int inter_release(struct inode *minode, struct file *mfile){
 	free_irq(gpio_to_irq(IMX_GPIO_NR(2, 15)), NULL);
 	free_irq(gpio_to_irq(IMX_GPIO_NR(5, 14)), NULL);
 
-	inter_end();
+	inter_end(0);
 	printk(KERN_ALERT "Release Module\n");
 	return 0;
 }
