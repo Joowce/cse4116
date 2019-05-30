@@ -17,6 +17,7 @@ void stopwatch_ctrl_start() {
     if(stopwatch_get_status() == TIMER_RUNNING) return;
 
     stopwatch_start(write_duration);
+    printk("[stopwatch ctrl start] start\n");
 }
 
 /**
@@ -25,9 +26,14 @@ void stopwatch_ctrl_start() {
  * if stopwatch is paused, then running
  */
 void stopwatch_ctrl_pause() {
-    if (stopwatch_get_status() == TIMER_RUNNING) stopwatch_pause();
-    else stopwatch_start(write_duration);
-
+    if (stopwatch_get_status() == TIMER_RUNNING) {
+        stopwatch_pause();
+        printk("[stopwatch ctrl pause] pause\n");
+    }
+    else {
+        stopwatch_start(write_duration);
+        printk("[stopwatch ctrl pause] start\n");
+    }
 }
 
 /**
@@ -39,7 +45,10 @@ void stopwatch_ctrl_reset() {
     TimerStatus status = stopwatch_get_status();
     stopwatch_reset(write_duration);
     
-    if (status == TIMER_RUNNING) stopwatch_start(write_duration);
+    if (status == TIMER_RUNNING) {
+        stopwatch_start(write_duration);
+        printk("[stopwatch ctrl reset] reset running\n");
+    } else printk("[stopwatch ctrl reset] reset only data\n")
 }
 
 /**
@@ -48,6 +57,7 @@ void stopwatch_ctrl_reset() {
  */
 void stopwatch_ctrl_exit() {
     stopwatch_reset(write_duration);
+    printk("[stopwatch ctrl exit] exit\n");
 }
 
 /**
@@ -58,6 +68,7 @@ void stopwatch_ctrl_exit() {
 void stopwatch_ctrl_init() {
     fnd_init();
     stopwatch_init(write_duration);
+    printk("[stopwatch ctrl init] init\n");
 }
 
 /**
@@ -75,4 +86,5 @@ static void write_duration (unsigned long duration) {
     result[3] = sec % 10;
 
     fnd_write(result);
+    printk("[write duration] min: %d sec %d\n", min, sec);
 }

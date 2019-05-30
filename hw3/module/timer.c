@@ -44,11 +44,12 @@ static void set_timeout (long clocks, void (*func) (unsigned long)) {
 static void stopwatch_blink (unsigned long timeout) {
     struct Stopwatch *p_watch = (struct Stopwatch*) timeout;
 
-    unsigned long diff = get_jiffies_64() - p_watch -> start;
+    unsigned long diff = get_jiffies_64() - (p_watch -> start);
     unsigned long sec = do_div(diff, HZ);
     p_watch->blink_handler(sec);
 
     set_timeout(HZ, stopwatch_blink);
+    printk("[stopwatch blink] sec: %ld", sec);
 }
 
 /**
