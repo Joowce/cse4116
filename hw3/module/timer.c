@@ -110,5 +110,5 @@ void stopwatch_reset (void(*after_handler)(unsigned long)) {
  * @return TimerStatus: timer status
  */
 TimerStatus stopwatch_get_status () {
-    return stopwatch.rest == NO_LAP ? TIMER_RUNNING : TIMER_PAUSE;
+    return stopwatch.status;
 }
