@@ -2,6 +2,7 @@
 // Created by 민지우 on 2019-05-24.
 //
 #include <asm/div64.h>
+#include <linux/kernel.h>
 
 #include "stopwatch_controller.h"
 #include "timer.h"
@@ -17,7 +18,7 @@ void stopwatch_ctrl_start() {
     if(stopwatch_get_status() == TIMER_RUNNING) return;
 
     stopwatch_start(write_duration);
-    printk("[stopwatch ctrl start] start\n");
+    printk(KERN_INFO "[stopwatch ctrl start] start\n");
 }
 
 /**
@@ -28,11 +29,11 @@ void stopwatch_ctrl_start() {
 void stopwatch_ctrl_pause() {
     if (stopwatch_get_status() == TIMER_RUNNING) {
         stopwatch_pause();
-        printk("[stopwatch ctrl pause] pause\n");
+        printk(KERN_INFO "[stopwatch ctrl pause] pause\n");
     }
     else {
         stopwatch_start(write_duration);
-        printk("[stopwatch ctrl pause] start\n");
+        printk(KERN_INFO "[stopwatch ctrl pause] start\n");
     }
 }
 
@@ -47,8 +48,8 @@ void stopwatch_ctrl_reset() {
     
     if (status == TIMER_RUNNING) {
         stopwatch_start(write_duration);
-        printk("[stopwatch ctrl reset] reset running\n");
-    } else printk("[stopwatch ctrl reset] reset only data\n")
+        printk(KERN_INFO "[stopwatch ctrl reset] reset running\n");
+    } else printk(KERN_INFO "[stopwatch ctrl reset] reset only data\n");
 }
 
 /**
@@ -57,7 +58,7 @@ void stopwatch_ctrl_reset() {
  */
 void stopwatch_ctrl_exit() {
     stopwatch_reset(write_duration);
-    printk("[stopwatch ctrl exit] exit\n");
+    printk(KERN_INFO "[stopwatch ctrl exit] exit\n");
 }
 
 /**
@@ -68,7 +69,7 @@ void stopwatch_ctrl_exit() {
 void stopwatch_ctrl_init() {
     fnd_init();
     stopwatch_init(write_duration);
-    printk("[stopwatch ctrl init] init\n");
+    printk(KERN_INFO "[stopwatch ctrl init] init\n");
 }
 
 /**
@@ -86,5 +87,5 @@ static void write_duration (unsigned long duration) {
     result[3] = sec % 10;
 
     fnd_write(result);
-    printk("[write duration] min: %d sec %d\n", min, sec);
+    printk(KERN_INFO "[write duration] min: %d sec %d\n", min, sec);
 }

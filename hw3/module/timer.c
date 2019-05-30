@@ -49,7 +49,7 @@ static void stopwatch_blink (unsigned long timeout) {
     p_watch->blink_handler(sec);
 
     set_timeout(HZ, stopwatch_blink);
-    printk("[stopwatch blink] sec: %ld", sec);
+    printk(KERN_INFO "[stopwatch blink] sec: %ld", sec);
 }
 
 /**
