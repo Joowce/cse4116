@@ -58,7 +58,7 @@ static void stopwatch_blink (unsigned long timeout) {
  */
 void stopwatch_init (void(*after_handler)(unsigned long)) {
     stopwatch.status = TIMER_INIT;
-    stopwatch.start = get_jiffies_64();
+    stopwatch.duration = 0;
     stopwatch.rest_clocks = NO_LAP;
 
     init_timer(&(stopwatch.timer));
@@ -70,9 +70,10 @@ void stopwatch_init (void(*after_handler)(unsigned long)) {
  * delete timer and store rest of expire clocks
  */
 void stopwatch_pause () {
-    stopwatch.rest = stopwatch.timer.expires - get_jiffies_64();
+    stopwatch.rest_clocks = stopwatch.timer.expires - get_jiffies_64();
     stopwatch.status = TIMER_PAUSE;
     del_timer_sync(&(stopwatch.timer));
+    printk("[stopwatch pause] rest clocks: %ld", stopwatch.rest_clocks);
 }
 
 /**
