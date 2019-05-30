@@ -1,7 +1,6 @@
 //
 // Created by 민지우 on 2019-05-24.
 //
-#include <asm/div64.h>
 #include <linux/kernel.h>
 
 #include "stopwatch_controller.h"
@@ -83,12 +82,12 @@ void stopwatch_ctrl_init() {
  * @param duration: seconds
  */
 static void write_duration (unsigned long duration) {
-    int min = do_div(duration, 60), sec = duration % 60;
+    int min = duration / 60, sec = duration % 60;
     char result[4];
 
-    result[0] = do_div(min, 10);
+    result[0] = min / 10;
     result[1] = min % 10;
-    result[2] = do_div(sec, 10);
+    result[2] = sec / 10;
     result[3] = sec % 10;
 
     fnd_write(result);
