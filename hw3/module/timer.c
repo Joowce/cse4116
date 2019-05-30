@@ -72,7 +72,7 @@ void stopwatch_init (void(*after_handler)(unsigned long)) {
 void stopwatch_pause () {
     stopwatch.rest_clocks = stopwatch.timer.expires - get_jiffies_64();
     stopwatch.status = TIMER_PAUSE;
-    del_timer_sync(&(stopwatch.timer));
+    del_timer(&(stopwatch.timer));
     printk("[stopwatch pause] rest clocks: %ld", stopwatch.rest_clocks);
 }
 

@@ -102,13 +102,15 @@ irqreturn_t handler_vol_up(int irq, void* dev_id,struct pt_regs* reg) {
  * @return
  */
 irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg) {
-        unsigned long jiffies = get_jiffies_64();
         printk(KERN_ALERT "vol down falling interrupt\n");
 
-        if (vol_down_timer.expires < jiffies){
+        if (time_is_before_jiffies(vol_down_timer.expires)) {
+            del_timer(&vol_down_timer);
             vol_down_timer.expires = jiffies + 3 * HZ;
             add_timer(&vol_down_timer);
+            printk(KERN_ALERT "start vol- timer");
         }
+
         return IRQ_HANDLED;
 }
 
@@ -121,8 +123,8 @@ irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg)
  * @return
  */
 irqreturn_t handler_vol_down_rising (int irq, void* dev_id, struct pt_regs* reg) {
-    printk(KERN_ALERT "vol down interrupt\n");
-    del_timer_sync(&vol_down_timer);
+    printk(KERN_ALERT "vol down rising interrupt\n");
+    del_timer(&vol_down_timer);
 	return IRQ_HANDLED;
 }
 
@@ -162,10 +164,8 @@ static int inter_open(struct inode *minode, struct file *mfile){
 	gpio_direction_input(IMX_GPIO_NR(5,14));
 	irq = gpio_to_irq(IMX_GPIO_NR(5,14));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-    ret=request_irq(irq, (irq_handler_t)handler_vol_down_falling, \
-		IRQF_TRIGGER_FALLING, "vol_down_falling", 0);
-    ret=request_irq(irq, (irq_handler_t)handler_vol_down_rising, \
-		IRQF_TRIGGER_RISING, "vol_down_rising", 0);
+    ret=request_irq(irq, (irq_handler_t)handler_vol_down_falling, IRQF_TRIGGER_FALLING, "vol_down_falling", 0);
+    ret=request_irq(irq, (irq_handler_t)handler_vol_down_rising, IRQF_TRIGGER_RISING, "vol_down_rising", 0);
 
 
     stopwatch_ctrl_init();
