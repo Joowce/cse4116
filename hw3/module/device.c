@@ -20,7 +20,7 @@ void fnd_write(char *val) {
 
     for (i =0; i < FND_DIGIT; i++) {
         fnd_val |= val[i];
-        fnd_val << 4;
+        fnd_val <<= 4;
     }
 
     outw(fnd_val, (unsigned int)iom_fpga_fnd_addr);
@@ -29,6 +29,6 @@ void fnd_write(char *val) {
 /**
  * map address for fnd
  */
-void fnd_init () {
+void fnd_init (void) {
     iom_fpga_fnd_addr = ioremap(IOM_FND_ADDRESS, 0x4);
 }

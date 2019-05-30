@@ -32,13 +32,12 @@ irqreturn_t handler_vol_up(int irq, void* dev_id, struct pt_regs* reg);
 irqreturn_t handler_vol_down_falling(int irq, void* dev_id, struct pt_regs* reg);
 irqreturn_t handler_vol_down_rising(int irq, void* dev_id, struct pt_regs* reg);
 
-static unsigned long vol_down_pressed_start_time = -1;
 /**
  * for vol- button
  * save start time for pressing
  * check user pressing during 3 sec
  */
-static unsigned long vol_down_pressed_start_time = NULL;
+static unsigned long vol_down_pressed_start_time = -1;
 
 /**
  * module's file operations
@@ -149,24 +148,26 @@ static int inter_open(struct inode *minode, struct file *mfile){
 	gpio_direction_input(IMX_GPIO_NR(1,11));
 	irq = gpio_to_irq(IMX_GPIO_NR(1,11));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-	ret=request_irq(irq, handler_home, IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING, "home", 0);
+	ret=request_irq(irq, (irq_handler_t)handler_home, IRQF_TRIGGER_FALLING, "home", 0);
 
 	gpio_direction_input(IMX_GPIO_NR(1,12));
 	irq = gpio_to_irq(IMX_GPIO_NR(1,12));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-    ret=request_irq(irq, handler_back, IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING, "back", 0);
+    ret=request_irq(irq, (irq_handler_t)handler_back, IRQF_TRIGGER_FALLING, "back", 0);
 
 	gpio_direction_input(IMX_GPIO_NR(2,15));
 	irq = gpio_to_irq(IMX_GPIO_NR(2,15));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-    ret=request_irq(irq, handler_vol_up, IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING, "vol_up", 0);
+    ret=request_irq(irq, (irq_handler_t)handler_vol_up, IRQF_TRIGGER_FALLING, "vol_up", 0);
 
 	// int4
 	gpio_direction_input(IMX_GPIO_NR(5,14));
 	irq = gpio_to_irq(IMX_GPIO_NR(5,14));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-    ret=request_irq(irq, handler_vol_down_falling, IRQF_TRIGGER_FALLING, "vol_down_falling", 0);
-    ret=request_irq(irq, handler_vol_down_rising, IRQF_TRIGGER_RISING, "vol_down_rising", 0);
+    ret=request_irq(irq, (irq_handler_t)handler_vol_down_falling, \
+		IRQF_TRIGGER_FALLING, "vol_down_falling", 0);
+    ret=request_irq(irq, (irq_handler_t)handler_vol_down_rising, \
+		IRQF_TRIGGER_RISING, "vol_down_rising", 0);
 
 
     stopwatch_ctrl_init();

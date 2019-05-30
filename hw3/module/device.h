@@ -6,6 +6,6 @@
 #define EMBEDED_DEVICE_H
 
 void fnd_write(char *val);
-void fnd_init ();
+void fnd_init (void);
 
 #endif //EMBEDED_DEVICE_H
