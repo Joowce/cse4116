@@ -1,4 +1,4 @@
-# CSE4116 HW
+# CSE4116
 > homework for [embedded system](http://dcclab.sogang.ac.kr)
 
 
