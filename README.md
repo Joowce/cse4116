@@ -1,6 +1,5 @@
 # CSE4116
-> homework for [embedded system](http://dcclab.sogang.ac.kr)
-
+> home work for [embedded system](http://dcclab.sogang.ac.kr)
 
 ## List
 ### [hw1](./hw1)
