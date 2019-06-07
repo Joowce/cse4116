@@ -1,8 +1,9 @@
 # CSE4116 HW
-> homework for embedded system
+> homework for [embedded system](http://dcclab.sogang.ac.kr)
+
 
 ## List
-1. [hw1](./hw1)
-2. hw2
+### [hw1](./hw1)
+### hw2
 - update later
-3. [hw3](./hw3)
+### [hw3](./hw3)
