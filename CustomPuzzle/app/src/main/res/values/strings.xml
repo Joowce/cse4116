@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Custom Puzzle</string>
+    <string name="student_id">20151543</string>
+    <string name="main_start">start</string>
+    <string name="puzzle_input_template">{row} {col}</string>
+    <string name="puzzle_start">Make Buttons</string>
+</resources>
