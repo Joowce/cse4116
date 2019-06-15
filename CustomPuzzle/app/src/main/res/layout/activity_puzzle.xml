@@ -23,4 +23,10 @@
         android:text="@string/puzzle_start"
         android:textSize="24sp" />
 
+    <LinearLayout
+        android:id="@+id/puzzleContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
+
 </LinearLayout>
