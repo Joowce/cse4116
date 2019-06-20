@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".PuzzleActivity"></activity>
+        <service android:name=".service.TimerService"></service>
     </application>
 
 </manifest>

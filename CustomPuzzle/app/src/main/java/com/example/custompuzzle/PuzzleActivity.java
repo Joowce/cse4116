@@ -21,6 +21,7 @@ import java.util.Locale;
 public class PuzzleActivity extends AppCompatActivity {
     private LinearLayout puzzleContainer;
     private Puzzle puzzle;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
