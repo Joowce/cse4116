@@ -1,4 +1,4 @@
-package com.example.custompuzzle.model;
+package com.example.custompuzzle.puzzle;
 
 import android.util.Log;
 

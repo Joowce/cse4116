@@ -1,31 +1,26 @@
 package com.example.custompuzzle;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.custompuzzle.model.Puzzle;
-import com.example.custompuzzle.service.TimeReceiver;
-import com.example.custompuzzle.service.TimerService;
-import com.example.custompuzzle.timer.RepeatedTask;
+import com.example.custompuzzle.puzzle.Puzzle;
+import com.example.custompuzzle.puzzle.PuzzleController;
 
 import java.util.Locale;
+
 
 public class PuzzleActivity extends AppCompatActivity {
     private LinearLayout puzzleContainer;
     private TextView timerText;
-    private Puzzle puzzle;
-    private TimeReceiver timeReceiver = new TimeReceiver();
+    private PuzzleController controller;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,34 +32,25 @@ public class PuzzleActivity extends AppCompatActivity {
         puzzleContainer = findViewById(R.id.puzzleContainer);
         timerText = findViewById(R.id.timer);
 
+        controller = new PuzzleController(this);
+
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PuzzleActivity.this.puzzleContainer.removeAllViewsInLayout();
-                String rawInput = input.getText().toString();
-                int[] dim = parseInteger(rawInput);
-                int row = dim[0];
-                int col = dim[1];
-
-                puzzle = new Puzzle(row, col);
-                PuzzleActivity.this.makeButtons(puzzle);
-
-                timeReceiver.registerReceiver(PuzzleActivity.this, new RepeatedTask(){
-                    @Override
-                    public void run(int sec) {
-                        timerText.setText(String.format(Locale.KOREA,
-                                "%02d:%02d", sec / 60, sec % 60));
-                    }
-                });
-                startService(new Intent(PuzzleActivity.this, TimerService.class));
+                PuzzleActivity.this.clearPuzzle();
+                controller.startPuzzle(input.getText().toString());
             }
         });
     }
-    private void makeButtons(final Puzzle puzzle) {
+
+    public void setTime(String string) {
+        timerText.setText(string);
+    }
+
+    public void makeButtons(final Puzzle puzzle, View.OnClickListener listener) {
         int[] size = puzzle.getSize();
         int row = size[0];
         int col = size[1];
-        View.OnClickListener listener = makeButtonClickListener(puzzle);
 
         for (int i = 0; i < row; i++) {
             LinearLayout puzzleRow = new LinearLayout(this);
@@ -94,62 +80,27 @@ public class PuzzleActivity extends AppCompatActivity {
         }
     }
 
-    private void swapButton(int[] emptyButton, int[] destButton, Puzzle puzzle) {
-        int piece = puzzle.getPuzzle().get(destButton[0]).get(destButton[1]);
-        setButtonStyle(
-                (Button) ((LinearLayout) this.puzzleContainer
-                        .getChildAt(destButton[0]))
-                        .getChildAt(destButton[1]),
-                "",
-                Color.LTGRAY);
-
-        setButtonStyle(
-                (Button) ((LinearLayout) this.puzzleContainer
-                        .getChildAt(emptyButton[0]))
-                        .getChildAt(emptyButton[1]),
-                String.format(Locale.KOREA, "%d", piece),
+    public void setPuzzlePieceStyle(int[] idx, int num) {
+        setButtonStyle((Button) ((LinearLayout) this.puzzleContainer
+                        .getChildAt(idx[0]))
+                        .getChildAt(idx[1]),
+                String.format(Locale.KOREA, "%d", num),
                 getResources().getColor(R.color.colorPrimaryLight));
     }
-
-    private View.OnClickListener makeButtonClickListener (final Puzzle puzzle) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int[] clicked = getClickedButtonIdx(view);
-                if (!puzzle.isAvailableMove(clicked)) return;
-                PuzzleActivity.this.swapButton(puzzle.getEmptyIndex(), clicked, puzzle);
-                puzzle.moveEmpty(clicked);
-                if (puzzle.checkFinished()) PuzzleActivity.this.endPuzzle();
-            }
-        };
+    public void setEmptyButtonStyle(int[] idx) {
+        setButtonStyle((Button) ((LinearLayout) this.puzzleContainer
+                        .getChildAt(idx[0]))
+                        .getChildAt(idx[1]),
+                "",
+                Color.LTGRAY);
     }
 
-    private void endPuzzle() {
-        timeReceiver.unregisterReceiver();
-        stopService(new Intent(PuzzleActivity.this, TimerService.class));
-        Toast.makeText(this, "Puzzle Complete", Toast.LENGTH_SHORT).show();
+    public void clearPuzzle() {
         this.puzzleContainer.removeAllViewsInLayout();
-        startActivity(new Intent(PuzzleActivity.this, MainActivity.class));
     }
 
-    private static int[] getClickedButtonIdx(View view) {
-        return parseInteger(view.getTag().toString());
-    }
-
-    static private int[] parseInteger (String raw) {
-        String[] split = raw.split(" ");
-        int row = 0;
-        int col = 0;
-
-        if (split.length < 2) return new int[] { 0, 0 };
-        try {
-            row = Integer.parseInt(split[0]);
-            col = Integer.parseInt(split[1]);
-        } catch (NumberFormatException e) {
-            Log.e(PuzzleActivity.class.getName(), "Invalid Input: " + raw);
-        }
-
-        return new int[] { row, col };
+    public static int[] getClickedButtonIdx(View view) {
+        return PuzzleController.parseInteger(view.getTag().toString());
     }
 
     static private void setButtonStyle (Button button, String text, int color) {
