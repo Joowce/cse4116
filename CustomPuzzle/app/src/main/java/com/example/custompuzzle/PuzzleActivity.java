@@ -22,6 +22,13 @@ public class PuzzleActivity extends AppCompatActivity {
     private TextView timerText;
     private PuzzleController controller;
 
+    /**
+     * set view
+     * update view member
+     * create puzzle controller
+     * register start button click listener
+     * @param savedInstanceState instance state
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +50,19 @@ public class PuzzleActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * update timer text view
+     * @param string text
+     */
     public void setTime(String string) {
         timerText.setText(string);
     }
 
+    /**
+     * make puzzle button using linear layout
+     * @param puzzle puzzle
+     * @param listener listener that is registered to buttons
+     */
     public void makeButtons(final Puzzle puzzle, View.OnClickListener listener) {
         int[] size = puzzle.getSize();
         int row = size[0];
@@ -80,6 +96,11 @@ public class PuzzleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * set puzzle style to button on idx
+     * @param idx idx of button
+     * @param num number of button
+     */
     public void setPuzzlePieceStyle(int[] idx, int num) {
         setButtonStyle((Button) ((LinearLayout) this.puzzleContainer
                         .getChildAt(idx[0]))
@@ -87,6 +108,11 @@ public class PuzzleActivity extends AppCompatActivity {
                 String.format(Locale.KOREA, "%d", num),
                 getResources().getColor(R.color.colorPrimaryLight));
     }
+
+    /**
+     * set empty piece style to button on idx
+     * @param idx idx of button
+     */
     public void setEmptyButtonStyle(int[] idx) {
         setButtonStyle((Button) ((LinearLayout) this.puzzleContainer
                         .getChildAt(idx[0]))
@@ -95,14 +121,29 @@ public class PuzzleActivity extends AppCompatActivity {
                 Color.LTGRAY);
     }
 
+    /**
+     * clear puzzle
+     * clear layout
+     */
     public void clearPuzzle() {
         this.puzzleContainer.removeAllViewsInLayout();
     }
 
+    /**
+     * parse button tag to get index of button
+     * @param view button view
+     * @return index of button
+     */
     public static int[] getClickedButtonIdx(View view) {
         return PuzzleController.parseInteger(view.getTag().toString());
     }
 
+    /**
+     * set style button
+     * @param button button
+     * @param text text
+     * @param color background color
+     */
     static private void setButtonStyle (Button button, String text, int color) {
         button.setText(text);
         button.setBackgroundColor(color);

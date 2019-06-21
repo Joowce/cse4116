@@ -12,7 +12,12 @@ public class Puzzle {
     private int col;
     private int[] emptyIndex = new int[] {0, 0};
 
-    public Puzzle(int row, int col) {
+    /**
+     * puzzle constructor
+     * @param row puzzle row
+     * @param col puzzle col
+     */
+    Puzzle(int row, int col) {
         puzzle = new ArrayList<>();
 
         int i, j;
@@ -31,6 +36,10 @@ public class Puzzle {
         this.shuffle();
     }
 
+    /**
+     * puzzle shuffle
+     * place pieces random
+     */
     private void shuffle() {
         Random rand = new Random();
         for (int i = row * col - 1; i > 0; i--) {
@@ -52,26 +61,47 @@ public class Puzzle {
         }
     }
 
+    /**
+     * get puzzle value
+     * @return puzzle
+     */
     public ArrayList<ArrayList<Integer>> getPuzzle() {
         return this.puzzle;
     }
 
+    /**
+     * get puzzle dimension
+     * @return dimension
+     */
     public int[] getSize() {
         return new int[] {
                 this.row, this.col
         };
     }
 
-    public int[] getEmptyIndex() {
+    /**
+     * get empty piece's index
+     * @return empty piece index
+     */
+    int[] getEmptyIndex() {
         return this.emptyIndex;
     }
 
+    /**
+     * set empty index
+     * @param r row index
+     * @param c col index
+     */
     private void setEmptyIndex(int r, int c) {
         this.emptyIndex[0] = r;
         this.emptyIndex[1] = c;
     }
 
-    public void moveEmpty(int[] dest) {
+    /**
+     * move empty piece
+     * @param dest destination's index
+     */
+    void moveEmpty(int[] dest) {
         int temp = this.puzzle.get(dest[0]).get(dest[1]);
         int emptyVal = this.puzzle.get(this.emptyIndex[0]).get(this.emptyIndex[1]);
         this.puzzle.get(dest[0]).set(dest[1], emptyVal);
@@ -79,12 +109,21 @@ public class Puzzle {
         this.setEmptyIndex(dest[0], dest[1]);
     }
 
-    public boolean isAvailableMove(int[] idx) {
+    /**
+     * check if idx piece can move
+     * @param idx piece's index
+     * @return if idx piece can move
+     */
+    boolean isAvailableMove(int[] idx) {
         Log.i(Puzzle.class.getName(), "idx: " + idx[0] + " " + idx[1]);
         return Math.abs(idx[0] - emptyIndex[0]) + Math.abs(idx[1] - emptyIndex[1]) == 1;
     }
 
-    public boolean checkFinished() {
+    /**
+     * check if puzzle completed
+     * @return if puzzle completed
+     */
+    boolean checkFinished() {
         int cnt = 1;
         for (ArrayList<Integer> row: this.puzzle) {
             for (int val: row) {

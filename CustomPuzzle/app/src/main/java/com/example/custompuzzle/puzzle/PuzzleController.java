@@ -18,10 +18,22 @@ public class PuzzleController {
     private TimeReceiver timeReceiver = new TimeReceiver();
     private PuzzleActivity view;
 
+    /**
+     * Puzzle controller constructor
+     * set view
+     * @param activity view
+     */
     public PuzzleController(PuzzleActivity activity) {
         view = activity;
     }
 
+    /**
+     * parse input text
+     * make puzzle model
+     * request to view for making buttons with puzzle model
+     * register broadcaster receiver for timer message
+     * @param rawInput input text
+     */
     public void startPuzzle (String rawInput) {
         int[] dim = parseInteger(rawInput);
         int row = dim[0];
@@ -34,6 +46,12 @@ public class PuzzleController {
 
         puzzle = new Puzzle(row, col);
         view.makeButtons(puzzle, new View.OnClickListener() {
+            /**
+             * puzzle button click handler
+             * get button index
+             * if puzzle can move, change button style
+             * @param buttonView: button view
+             */
             @Override
             public void onClick(View buttonView) {
                 int[] clicked = PuzzleActivity.getClickedButtonIdx(buttonView);
@@ -47,6 +65,11 @@ public class PuzzleController {
         });
 
         timeReceiver.registerReceiver(view, new RepeatedTask(){
+            /**
+             * run when get timer message
+             * update time text
+             * @param sec duration of timer
+             */
             @Override
             public void run(int sec) {
                 view.setTime(String.format(Locale.KOREA,
@@ -56,6 +79,14 @@ public class PuzzleController {
         view.startService(new Intent(view, TimerService.class));
     }
 
+    /**
+     * when puzzle completed end puzzle
+     * unregister time receiver
+     * stop service
+     * create toast message
+     * clear puzzle container
+     * back to main activity
+     */
     private void endPuzzle() {
         timeReceiver.unregisterReceiver();
         view.stopService(new Intent(view, TimerService.class));
@@ -64,6 +95,11 @@ public class PuzzleController {
         view.startActivity(new Intent(view, MainActivity.class));
     }
 
+    /**
+     * parse text input to row, col
+     * @param raw raw input
+     * @return {row, col}
+     */
     static public int[] parseInteger (String raw) {
         String[] split = raw.split(" ");
         int row = 0;

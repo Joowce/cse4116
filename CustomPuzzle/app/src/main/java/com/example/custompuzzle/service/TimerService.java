@@ -12,17 +12,33 @@ public class TimerService extends Service {
     private Timer timer;
     private TimeBroadcaster broadcaster;
 
+    /**
+     * make instance of broadcaster and timer
+     */
     @Override
     public void onCreate() {
         broadcaster = new TimeBroadcaster(this);
         timer = new Timer();
     }
 
+    /**
+     * this service is started service so do nothing
+     * @param intent message
+     * @return null
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    /**
+     * start timer
+     * timer broadcast time each a second
+     * @param intent message
+     * @param flags flag
+     * @param startId start id
+     * @return start id
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startTimer(new RepeatedTask() {
@@ -34,16 +50,27 @@ public class TimerService extends Service {
         return startId;
     }
 
+    /**
+     * cancel timer when service destroyed
+     */
     @Override
     public void onDestroy() {
         cancelTimer();
         super.onDestroy();
     }
 
+    /**
+     * cancel timer
+     */
     public void cancelTimer() {
         timer.endTimer();
     }
 
+    /**
+     * register task to timer
+     * start timer
+     * @param task task while timer running
+     */
     public void startTimer(final RepeatedTask task) {
             this.cancelTimer();
 

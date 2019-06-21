@@ -12,6 +12,13 @@ public class Timer extends Handler {
     private int seconds = 0;
     private RepeatedTask task = null;
 
+    /**
+     * callback method for message event
+     * message type is start: start timer
+     * repeat: run task and send message after interval
+     * end: remove repeated message
+     * @param msg received message
+     */
     @Override
     public void handleMessage (Message msg) {
         switch (msg.what) {
@@ -32,14 +39,26 @@ public class Timer extends Handler {
         }
     }
 
+    /**
+     * set task
+     * @param task task called when timer tick
+     */
     public void setTask(RepeatedTask task) {
         this.task = task;
     }
 
+    /**
+     * end timer
+     * send end message
+     */
     public void endTimer() {
         this.sendEmptyMessage(MESSAGE_TIMER_END);
     }
 
+    /**
+     * start timer
+     * send start message
+     */
     public void startTimer() {
         this.sendEmptyMessage(MESSAGE_TIMER_START);
     }

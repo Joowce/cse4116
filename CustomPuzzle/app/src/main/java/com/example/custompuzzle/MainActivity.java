@@ -10,6 +10,11 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * set view
+     * register start button click listener
+     * @param savedInstanceState instanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
         Button startButton = findViewById(R.id.startButton);
         View.OnClickListener listener = new View.OnClickListener() {
+            /**
+             * go puzzle activity
+             * @param view button view
+             */
             @Override
             public void onClick(View view) {
                 Log.i(MainActivity.class.getName(), "clicked");

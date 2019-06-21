@@ -13,10 +13,18 @@ class TimeBroadcaster {
 
     private  LocalBroadcastManager broadcastManager;
 
+    /**
+     * timeBroadcaster constructor
+     * @param context context that use this timeBroadcaster
+     */
     TimeBroadcaster(Context context) {
         broadcastManager = LocalBroadcastManager.getInstance(context);
     }
 
+    /**
+     * broadcast sec message to broadcast receiver
+     * @param sec sec
+     */
     void broadcastTime(int sec) {
         Intent intent = new Intent(TIMER_TICK);
         intent.putExtra(TIMER_TIME, sec);
