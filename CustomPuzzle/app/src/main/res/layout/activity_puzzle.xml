@@ -11,7 +11,11 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/puzzle_input_template"
-        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:inputType="phone"
+        android:labelFor="@id/startPuzzle"
+        android:selectAllOnFocus="false"
+        android:singleLine="true"
         android:textSize="24sp" />
 
     <Button
@@ -22,6 +26,15 @@
         android:baselineAligned="true"
         android:text="@string/puzzle_start"
         android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/puzzleContainer"

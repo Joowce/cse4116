@@ -1,8 +1,12 @@
 package com.example.custompuzzle;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,12 +19,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.custompuzzle.model.Puzzle;
+import com.example.custompuzzle.service.TimerService;
 
 import java.util.Locale;
 
 public class PuzzleActivity extends AppCompatActivity {
     private LinearLayout puzzleContainer;
+    private TextView timerText;
     private Puzzle puzzle;
+    private TimerService.TimerBinder timer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +37,10 @@ public class PuzzleActivity extends AppCompatActivity {
         Button startBtn = findViewById(R.id.startPuzzle);
         final TextView input = findViewById(R.id.buttonDimension);
         puzzleContainer = findViewById(R.id.puzzleContainer);
+        timerText = findViewById(R.id.timer);
+
+        bindService(new Intent(PuzzleActivity.this, TimerService.class),
+                mConnection, Context.BIND_AUTO_CREATE);
 
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,10 +54,19 @@ public class PuzzleActivity extends AppCompatActivity {
 
                 puzzle = new Puzzle(row, col);
                 PuzzleActivity.this.makeButtons(puzzle);
+                if (timer != null) {
+                    timer.cancelTimer();
+                    timer.startTimer(new TimerService.RepeatedTask(){
+                        @Override
+                        public void run(int sec) {
+                            timerText.setText(String.format(Locale.KOREA,
+                                    "%2d:%2d", sec / 60, sec % 60));
+                        }
+                    });
+                }
             }
         });
     }
-
     private void makeButtons(final Puzzle puzzle) {
         int[] size = puzzle.getSize();
         int row = size[0];
@@ -109,6 +129,7 @@ public class PuzzleActivity extends AppCompatActivity {
     }
 
     private void endPuzzle() {
+        timer.cancelTimer();
         Toast.makeText(this, "Puzzle Complete", Toast.LENGTH_SHORT).show();
         this.puzzleContainer.removeAllViewsInLayout();
         startActivity(new Intent(PuzzleActivity.this, MainActivity.class));
@@ -122,6 +143,8 @@ public class PuzzleActivity extends AppCompatActivity {
         String[] split = raw.split(" ");
         int row = 0;
         int col = 0;
+
+        if (split.length < 2) return new int[] { 0, 0 };
         try {
             row = Integer.parseInt(split[0]);
             col = Integer.parseInt(split[1]);
@@ -136,4 +159,16 @@ public class PuzzleActivity extends AppCompatActivity {
         button.setText(text);
         button.setBackgroundColor(color);
     }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            timer = (TimerService.TimerBinder) iBinder;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            timer = null;
+        }
+    };
 }
