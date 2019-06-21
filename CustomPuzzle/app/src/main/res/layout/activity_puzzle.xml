@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:baselineAligned="true"
+        android:fontFamily="sans-serif-condensed"
         android:text="@string/puzzle_start"
         android:textSize="24sp" />
 

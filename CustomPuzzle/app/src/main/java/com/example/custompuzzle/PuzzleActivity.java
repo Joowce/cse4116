@@ -77,6 +77,8 @@ public class PuzzleActivity extends AppCompatActivity {
                 btn.setLayoutParams(new LinearLayout.LayoutParams(
                         LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 btn.setTag(String.format(Locale.KOREA, "%d %d", i, j));
+                btn.setWidth(puzzleContainer.getWidth() / col);
+                btn.setHeight(puzzleContainer.getHeight() / row);
 
                 int piece = puzzle.getPuzzle().get(i).get(j);
                 btn.setId(piece);
