@@ -1,12 +1,8 @@
 package com.example.custompuzzle;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.custompuzzle.model.Puzzle;
+import com.example.custompuzzle.service.TimeReceiver;
 import com.example.custompuzzle.service.TimerService;
+import com.example.custompuzzle.timer.RepeatedTask;
 
 import java.util.Locale;
 
@@ -27,7 +25,7 @@ public class PuzzleActivity extends AppCompatActivity {
     private LinearLayout puzzleContainer;
     private TextView timerText;
     private Puzzle puzzle;
-    private TimerService.TimerBinder timer;
+    private TimeReceiver timeReceiver = new TimeReceiver();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,9 +37,6 @@ public class PuzzleActivity extends AppCompatActivity {
         puzzleContainer = findViewById(R.id.puzzleContainer);
         timerText = findViewById(R.id.timer);
 
-        bindService(new Intent(PuzzleActivity.this, TimerService.class),
-                mConnection, Context.BIND_AUTO_CREATE);
-
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,20 +45,18 @@ public class PuzzleActivity extends AppCompatActivity {
                 int[] dim = parseInteger(rawInput);
                 int row = dim[0];
                 int col = dim[1];
-                Log.d(PuzzleActivity.class.getName(), "" + row + " " + col);
 
                 puzzle = new Puzzle(row, col);
                 PuzzleActivity.this.makeButtons(puzzle);
-                if (timer != null) {
-                    timer.cancelTimer();
-                    timer.startTimer(new TimerService.RepeatedTask(){
-                        @Override
-                        public void run(int sec) {
-                            timerText.setText(String.format(Locale.KOREA,
-                                    "%2d:%2d", sec / 60, sec % 60));
-                        }
-                    });
-                }
+
+                timeReceiver.registerReceiver(PuzzleActivity.this, new RepeatedTask(){
+                    @Override
+                    public void run(int sec) {
+                        timerText.setText(String.format(Locale.KOREA,
+                                "%02d:%02d", sec / 60, sec % 60));
+                    }
+                });
+                startService(new Intent(PuzzleActivity.this, TimerService.class));
             }
         });
     }
@@ -84,9 +77,10 @@ public class PuzzleActivity extends AppCompatActivity {
                 btn.setLayoutParams(new LinearLayout.LayoutParams(
                         LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 btn.setTag(String.format(Locale.KOREA, "%d %d", i, j));
-                int piece = puzzle.getPuzzle().get(i).get(j);
 
+                int piece = puzzle.getPuzzle().get(i).get(j);
                 btn.setId(piece);
+
                 if (piece == row * col) setButtonStyle(btn, "", Color.LTGRAY);
                 else setButtonStyle(btn,
                             String.format(Locale.KOREA, "%d", piece),
@@ -129,7 +123,8 @@ public class PuzzleActivity extends AppCompatActivity {
     }
 
     private void endPuzzle() {
-        timer.cancelTimer();
+        timeReceiver.unregisterReceiver();
+        stopService(new Intent(PuzzleActivity.this, TimerService.class));
         Toast.makeText(this, "Puzzle Complete", Toast.LENGTH_SHORT).show();
         this.puzzleContainer.removeAllViewsInLayout();
         startActivity(new Intent(PuzzleActivity.this, MainActivity.class));
@@ -159,16 +154,4 @@ public class PuzzleActivity extends AppCompatActivity {
         button.setText(text);
         button.setBackgroundColor(color);
     }
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            timer = (TimerService.TimerBinder) iBinder;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            timer = null;
-        }
-    };
 }

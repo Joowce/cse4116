@@ -2,40 +2,36 @@ package com.example.custompuzzle.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.IBinder;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import com.example.custompuzzle.timer.RepeatedTask;
+import com.example.custompuzzle.timer.Timer;
+
 
 public class TimerService extends Service {
-    public interface RepeatedTask {
-        void run (int sec);
-    }
-
-    public class TimerBinder extends Binder {
-        public void startTimer (RepeatedTask task) {
-            TimerService.this.startTimer(task);
-        }
-
-        public void cancelTimer () {
-            TimerService.this.cancelTimer();
-        }
-    }
-
     private Timer timer;
-    private int sec = 0;
-    private IBinder binder = new TimerBinder();
+    private TimeBroadcaster broadcaster;
 
     @Override
     public void onCreate() {
+        broadcaster = new TimeBroadcaster(this);
         timer = new Timer();
-        sec = 0;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return binder;
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        startTimer(new RepeatedTask() {
+            @Override
+            public void run(int sec) {
+                broadcaster.broadcastTime(sec);
+            }
+        });
+        return startId;
     }
 
     @Override
@@ -44,21 +40,15 @@ public class TimerService extends Service {
         super.onDestroy();
     }
 
-    private void cancelTimer() {
-        timer.cancel();
-        sec = 0;
+    public void cancelTimer() {
+        timer.endTimer();
     }
 
-    private void startTimer(final RepeatedTask task) {
+    public void startTimer(final RepeatedTask task) {
             this.cancelTimer();
-            timer = new Timer();
 
             if (task == null) return;
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    task.run(sec++);
-                }
-            }, 0L, 1000L);
+            timer.setTask(task);
+            timer.startTimer();
     }
 }
